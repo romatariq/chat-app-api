@@ -1,4 +1,3 @@
-#pragma warning disable 1591
 using System.Reflection;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
@@ -35,9 +34,9 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         
         
         // include xml comments (enable creation in csproj file)
-        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-        options.IncludeXmlComments(xmlPath);
+        // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        // options.IncludeXmlComments(xmlPath);
         
         options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
         {

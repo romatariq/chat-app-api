@@ -23,5 +23,10 @@
     <ItemGroup>
       <ProjectReference Include="..\App.DAL.EF\App.DAL.EF.csproj" />
     </ItemGroup>
+    
+<!--    for xml-->
+<!--    <PropertyGroup>-->
+<!--        <GenerateDocumentationFile>true</GenerateDocumentationFile>-->
+<!--    </PropertyGroup>-->
 
 </Project>
