@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Domain", "App.Domain\Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Domain", "Base.Domain\Base.Domain.csproj", "{5C89982D-CE45-40AC-ACDA-3E36AB40843E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "base.Contracts.Domain", "base.Contracts.Domain\base.Contracts.Domain.csproj", "{37B8D2D9-7BB3-4CD6-95E6-52C2D5D0588C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Contracts.Domain", "Base.Contracts.Domain\Base.Contracts.Domain.csproj", "{37B8D2D9-7BB3-4CD6-95E6-52C2D5D0588C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{CC4F94BC-803E-481E-98C1-DB26ABA3C048}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,6 +17,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		ChatAppApi.sln = ChatAppApi.sln
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{4F71A9E6-74BF-46D8-8B80-C883C56FDF35}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{853F1AF2-97CC-449D-A411-80A849FCD23A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,5 +48,12 @@ Global
 		{37B8D2D9-7BB3-4CD6-95E6-52C2D5D0588C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37B8D2D9-7BB3-4CD6-95E6-52C2D5D0588C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37B8D2D9-7BB3-4CD6-95E6-52C2D5D0588C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B7E80F2E-8071-4357-A8A6-EB1350543F8B} = {4F71A9E6-74BF-46D8-8B80-C883C56FDF35}
+		{9C098622-11B0-4114-A15E-A8CBCD1A713A} = {4F71A9E6-74BF-46D8-8B80-C883C56FDF35}
+		{6F2AA293-A714-4A50-9A6C-E82D94511E60} = {4F71A9E6-74BF-46D8-8B80-C883C56FDF35}
+		{5C89982D-CE45-40AC-ACDA-3E36AB40843E} = {853F1AF2-97CC-449D-A411-80A849FCD23A}
+		{37B8D2D9-7BB3-4CD6-95E6-52C2D5D0588C} = {853F1AF2-97CC-449D-A411-80A849FCD23A}
 	EndGlobalSection
 EndGlobal
