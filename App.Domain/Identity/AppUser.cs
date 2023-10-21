@@ -8,4 +8,13 @@ public class AppUser: IdentityUser<Guid>, IDomainEntityId
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
     
     public bool IsVerified { get; set; }
+
+
+    public ICollection<Comment>? Comments { get; set; }
+
+    public ICollection<GroupUser>? GroupUsers { get; set; }
+
+    public ICollection<CommentReaction>? CommentReactions { get; set; }
+
+    public ICollection<DomainReport>? DomainReports { get; set; }
 }
