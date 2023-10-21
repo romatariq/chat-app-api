@@ -15,7 +15,4 @@ public class AppUser: IdentityUser<Guid>, IDomainEntityId
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
     
     public bool IsVerified { get; set; }
- 
-    
-    public ICollection<AppRefreshToken>? AppRefreshTokens { get; set; }
 }

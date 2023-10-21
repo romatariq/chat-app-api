@@ -1,4 +1,3 @@
-using System.Text;
 using App.DAL.EF;
 using App.DAL.EF.Seeding;
 using App.Domain.Identity;
@@ -7,7 +6,6 @@ using Asp.Versioning.ApiExplorer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using WebApp;
 
@@ -33,20 +31,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(
 
 builder.Services
     .AddAuthentication()
-    .AddCookie(options => { options.SlidingExpiration = true; })
-    .AddJwtBearer(options =>
-    {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = false;
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidIssuer = builder.Configuration.GetValue<string>("JWT:Issuer")!,
-            ValidAudience = builder.Configuration.GetValue<string>("JWT:Audience")!,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("JWT:Key")!)),
-            ClockSkew = TimeSpan.Zero,
-        };
-    });
+    .AddCookie(options => { options.SlidingExpiration = true; });
 
 
 builder.Services.AddControllersWithViews();
