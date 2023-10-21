@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace App.DAL.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230924105036_Initial")]
+    [Migration("20231021112036_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,37 +24,6 @@ namespace App.DAL.EF.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("App.Domain.Identity.AppRefreshToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("AppUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ExpirationUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("PreviousExpirationUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("PreviousRefreshToken")
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.ToTable("AppRefreshTokens");
-                });
 
             modelBuilder.Entity("App.Domain.Identity.AppRole", b =>
                 {
@@ -106,18 +75,8 @@ namespace App.DAL.EF.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
                     b.Property<bool>("IsVerified")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -267,17 +226,6 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("App.Domain.Identity.AppRefreshToken", b =>
-                {
-                    b.HasOne("App.Domain.Identity.AppUser", "AppUser")
-                        .WithMany("AppRefreshTokens")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("App.Domain.Identity.AppRole", null)
@@ -327,11 +275,6 @@ namespace App.DAL.EF.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("App.Domain.Identity.AppUser", b =>
-                {
-                    b.Navigation("AppRefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

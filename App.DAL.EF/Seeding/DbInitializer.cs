@@ -39,7 +39,7 @@ public static class DbInitializer
     public static void SeedIdentity(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
     {
         SeedRoles(roleManager);
-        (Guid id, string email, string password) userData = (AdminId, "admin@app.com", "Foo.bar1");
+        (Guid id, string email, string password, string userName) userData = (AdminId, "admin@app.com", "Foo.bar1", "Admin");
         var user = userManager.FindByEmailAsync(userData.email).Result;
         if (user != null) return;
         
@@ -47,10 +47,8 @@ public static class DbInitializer
         {
             Id = userData.id,
             Email = userData.email,
-            UserName = userData.email,
-            EmailConfirmed = true,
-            FirstName = "Admin",
-            LastName = "App",
+            UserName = userData.userName,
+            EmailConfirmed = true, 
             IsVerified = true
         };
         var result = userManager.CreateAsync(user, userData.password).Result;
@@ -64,12 +62,6 @@ public static class DbInitializer
         {
             throw new ApplicationException($"Cannot add role to admin, {result}");
         }
-        
-        userManager.AddClaimsAsync(user, new List<Claim>()
-        {
-            new(ClaimTypes.GivenName, user.FirstName),
-            new(ClaimTypes.Surname, user.LastName)
-        }).Wait();
     }
     
 }
