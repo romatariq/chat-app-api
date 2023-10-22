@@ -89,7 +89,7 @@ public class AccountController : ControllerBase
         if (appUser == null)
         {
             await Task.Delay(_rnd.Next(100, 1000));
-
+        
             return BadRequest(new RestApiErrorResponse()
             {
                 Error = "User/Password problem"
@@ -104,7 +104,7 @@ public class AccountController : ControllerBase
             });
         }
 
-        var result = await _signInManager.PasswordSignInAsync(appUser, loginData.Password, true, true);
+        var result = await _signInManager.PasswordSignInAsync(appUser, loginData.Password, true, false);
         if (!result.Succeeded)
         {
             await Task.Delay(_rnd.Next(100, 1000));
@@ -113,7 +113,7 @@ public class AccountController : ControllerBase
                 Error = "User/Password problem"
             });
         }
-        
+
         _logger.LogInformation("{} logged in.", appUser.UserName);
         return Ok();
     }

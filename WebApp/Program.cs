@@ -31,7 +31,14 @@ builder.Services.AddIdentity<AppUser, AppRole>(
 
 builder.Services
     .AddAuthentication()
-    .AddCookie(options => { options.SlidingExpiration = true; });
+    .AddCookie(options => options.SlidingExpiration = true);
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+    options.SlidingExpiration = true;
+    options.Cookie.Name = "myCookie";
+});
 
 
 builder.Services.AddControllersWithViews();
@@ -95,11 +102,10 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
+app.UseCookiePolicy();
 app.UseCors("CorsAllowAll");
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
