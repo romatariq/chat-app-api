@@ -1,4 +1,3 @@
-using System.Reflection;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
@@ -31,12 +30,5 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
 
         // use full names for dto descriptions
         options.CustomSchemaIds(t => t.FullName);
-        
-        
-        // include xml comments (enable creation in csproj file)
-        // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-        // options.IncludeXmlComments(xmlPath);
-        
     }
 }

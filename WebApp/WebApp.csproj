@@ -99,9 +99,5 @@
       <Folder Include="wwwroot\" />
     </ItemGroup>
     
-<!--    for xml-->
-<!--    <PropertyGroup>-->
-<!--        <GenerateDocumentationFile>true</GenerateDocumentationFile>-->
-<!--    </PropertyGroup>-->
 
 </Project>
