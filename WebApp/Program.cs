@@ -80,6 +80,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 builder.Services.AddSwaggerGen();
 
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
+
 
 // builder.Services.AddAutoMapper(
 //     typeof(App.Mappers.AutoMapperConfigs.PublicDTOConfig),
