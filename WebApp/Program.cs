@@ -30,14 +30,18 @@ builder.Services.AddIdentity<AppUser, AppRole>(
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services
-    .AddAuthentication()
-    .AddCookie(options => options.SlidingExpiration = true);
+    .AddAuthentication();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+    options.ExpireTimeSpan = TimeSpan.FromHours(3);
     options.SlidingExpiration = true;
-    options.Cookie.Name = "myCookie";
+    options.Cookie.Name = "auth";
+    options.Events.OnRedirectToLogin = redirectContext =>
+    {
+        redirectContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return Task.CompletedTask;
+    };
 });
 
 
