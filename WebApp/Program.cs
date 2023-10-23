@@ -29,8 +29,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(
     .AddDefaultUI()
     .AddEntityFrameworkStores<AppDbContext>();
 
-builder.Services
-    .AddAuthentication();
+builder.Services.AddAuthentication();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -44,8 +43,6 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
-
-builder.Services.AddControllersWithViews();
 
 builder.Services.AddCors(options =>
 {
@@ -101,7 +98,6 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
@@ -113,10 +109,7 @@ app.UseCookiePolicy();
 app.UseCors("CorsAllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllers();
 
 
 app.UseSwagger();
