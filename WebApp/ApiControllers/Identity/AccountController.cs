@@ -50,7 +50,8 @@ public class AccountController : ControllerBase
             });
         }
         
-        appUser = await _userManager.FindByNameAsync(registrationData.UserName);
+        appUser = await _context.Users
+            .FirstOrDefaultAsync(u => string.Equals(u.UserName, registrationData.UserName, StringComparison.CurrentCultureIgnoreCase));
         if (appUser != null)
         {
             return BadRequest(new RestApiErrorResponse()
