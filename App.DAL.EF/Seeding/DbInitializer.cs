@@ -1,16 +1,11 @@
-﻿using System.Security.Claims;
-using App.Domain;
-using App.Domain.Identity;
+﻿using App.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic.FileIO;
 
 namespace App.DAL.EF.Seeding;
 
 public static class DbInitializer
 {
-    
-    private static readonly Guid AdminId = Guid.Parse("bc7458ac-cbb0-4ecd-be79-d5abf19f8c77");
     
 
     public static void MigrateDatabase(AppDbContext ctx)
@@ -36,28 +31,27 @@ public static class DbInitializer
         }
     }
     
-    public static void SeedIdentity(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+    public static void SeedIdentity(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, string adminPassword)
     {
         SeedRoles(roleManager);
-        (Guid id, string email, string password, string userName) userData = (AdminId, "admin@app.com", "Foo.bar1", "Admin");
-        var user = userManager.FindByEmailAsync(userData.email).Result;
-        if (user != null) return;
+        (string email, string userName) adminData = ("admin@app.com", "Admin");
+        var admin = userManager.FindByEmailAsync(adminData.email).Result;
+        if (admin != null) return;
         
-        user = new AppUser()
+        admin = new AppUser()
         {
-            Id = userData.id,
-            Email = userData.email,
-            UserName = userData.userName,
+            Email = adminData.email,
+            UserName = adminData.userName,
             EmailConfirmed = true, 
             IsVerified = true
         };
-        var result = userManager.CreateAsync(user, userData.password).Result;
+        var result = userManager.CreateAsync(admin, adminPassword).Result;
         if (!result.Succeeded)
         {
             throw new ApplicationException($"Cannot seed users, {result}");
         }
         
-        var roleAddResult = userManager.AddToRoleAsync(user, "admin").Result;
+        var roleAddResult = userManager.AddToRoleAsync(admin, "admin").Result;
         if (!roleAddResult.Succeeded)
         {
             throw new ApplicationException($"Cannot add role to admin, {result}");
