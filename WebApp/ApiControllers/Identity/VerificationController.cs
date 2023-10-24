@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Mime;
 using App.Domain.Identity;
 using App.Public.DTO.v1;
@@ -29,11 +28,12 @@ public class VerificationController : ControllerBase
     [HttpGet]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(VerifyUser), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<VerifyUser>>> GetAll()
+    public async Task<ActionResult<RestApiResponseWithPaging<IEnumerable<VerifyUser>>>> GetAll(
+        [FromBody] RestApiRequestWithPaging requestWithPaging)
     {
-        // TODO: Add paging
         var admins = await _userManager.GetUsersInRoleAsync("admin");
-        return await _userManager.Users
+        
+        var users = await _userManager.Users
             .OrderByDescending(u => u.CreatedAtUtc)
             .Where(u => !admins.Contains(u))
             .Select(u => new VerifyUser
@@ -41,7 +41,20 @@ public class VerificationController : ControllerBase
                 Email = u.Email!,
                 IsVerified = u.IsVerified
             })
+            .Skip((requestWithPaging.PageNr - 1)  * requestWithPaging.PageSize)
+            .Take(requestWithPaging.PageSize)
             .ToListAsync();
+        
+        var usersCount = _userManager.Users
+            .Count(u => !admins.Contains(u));
+
+        return new RestApiResponseWithPaging<IEnumerable<VerifyUser>>()
+        {
+            Data = users,
+            PageNr = requestWithPaging.PageNr,
+            PageSize = requestWithPaging.PageSize,
+            PageCount = usersCount / requestWithPaging.PageSize + (usersCount % requestWithPaging.PageSize == 0 ? 0 : 1)
+        };
     }
     
     
