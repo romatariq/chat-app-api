@@ -4,3 +4,5 @@
 - [X] Add filters to username ([a-z], [A-Z], [0-9], _, -)
 - [ ] Add email confirmation (mvc?, not just link but also has to click a button)
 - [X] Remove hard coded admin info (id, password)
+- [ ] Add paging (verificationController getAll)
+- [ ] Fix all TODOs
