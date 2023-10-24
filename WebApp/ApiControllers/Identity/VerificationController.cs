@@ -28,8 +28,8 @@ public class VerificationController : ControllerBase
     [HttpGet]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(VerifyUser), StatusCodes.Status200OK)]
-    public async Task<ActionResult<RestApiResponseWithPaging<IEnumerable<VerifyUser>>>> GetAll(
-        [FromBody] RestApiRequestWithPaging requestWithPaging)
+    public async Task<ActionResult<ResponseWithPaging<IEnumerable<VerifyUser>>>> GetAll(
+        [FromBody] RequestWithPaging requestWithPaging)
     {
         var admins = await _userManager.GetUsersInRoleAsync("admin");
         
@@ -48,7 +48,7 @@ public class VerificationController : ControllerBase
         var usersCount = _userManager.Users
             .Count(u => !admins.Contains(u));
 
-        return new RestApiResponseWithPaging<IEnumerable<VerifyUser>>()
+        return new ResponseWithPaging<IEnumerable<VerifyUser>>()
         {
             Data = users,
             PageNr = requestWithPaging.PageNr,
@@ -61,14 +61,14 @@ public class VerificationController : ControllerBase
     [HttpPut]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(VerifyUser), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(RestApiErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<VerifyUser>> Set(
         [FromBody] VerifyUser setUser)
     {
         var user = await _userManager.FindByEmailAsync(setUser.Email);
         if (user == null)
         {
-            return BadRequest(new RestApiErrorResponse()
+            return BadRequest(new ErrorResponse()
             {
                 Error = "User with given email not found",
             });

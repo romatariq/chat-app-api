@@ -38,13 +38,13 @@ public class AccountController : ControllerBase
     [HttpPost]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(RestApiErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Register([FromBody] Register registrationData)
     {
         var appUser = await _userManager.FindByEmailAsync(registrationData.Email);
         if (appUser != null)
         {
-            return BadRequest(new RestApiErrorResponse()
+            return BadRequest(new ErrorResponse()
             {
                 Error = $"Email {registrationData.Email} already registered"
             });
@@ -53,7 +53,7 @@ public class AccountController : ControllerBase
         appUser = await _userManager.FindByNameAsync(registrationData.UserName);
         if (appUser != null)
         {
-            return BadRequest(new RestApiErrorResponse()
+            return BadRequest(new ErrorResponse()
             {
                 Error = $"Username {registrationData.UserName} already registered"
             });
@@ -68,7 +68,7 @@ public class AccountController : ControllerBase
         var result = await _userManager.CreateAsync(appUser, registrationData.Password);
         if (!result.Succeeded)
         {
-            return BadRequest(new RestApiErrorResponse()
+            return BadRequest(new ErrorResponse()
             {
                 Error = result.Errors.First().Description
             });
@@ -82,7 +82,7 @@ public class AccountController : ControllerBase
     [HttpPost]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(RestApiErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> LogIn([FromBody] Login loginData)
     {
         var appUser = await _userManager.FindByEmailAsync(loginData.Email);
@@ -90,7 +90,7 @@ public class AccountController : ControllerBase
         {
             await Task.Delay(_rnd.Next(100, 1000));
         
-            return BadRequest(new RestApiErrorResponse()
+            return BadRequest(new ErrorResponse()
             {
                 Error = "User/Password problem"
             });
@@ -98,7 +98,7 @@ public class AccountController : ControllerBase
         
         if (!appUser.IsVerified)
         {
-            return BadRequest(new RestApiErrorResponse()
+            return BadRequest(new ErrorResponse()
             {
                 Error = "User is not verified"
             });
@@ -108,7 +108,7 @@ public class AccountController : ControllerBase
         if (!result.Succeeded)
         {
             await Task.Delay(_rnd.Next(100, 1000));
-            return BadRequest(new RestApiErrorResponse()
+            return BadRequest(new ErrorResponse()
             {
                 Error = "User/Password problem"
             });
@@ -123,7 +123,7 @@ public class AccountController : ControllerBase
     [Authorize]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(RestApiErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Logout()
     {
         var userId = User.GetUserId();
@@ -133,7 +133,7 @@ public class AccountController : ControllerBase
             .SingleOrDefaultAsync();
         if (appUser == null)
         {
-            return BadRequest(new RestApiErrorResponse()
+            return BadRequest(new ErrorResponse()
             {
                 Error = "User problem"
             });
