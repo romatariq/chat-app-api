@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using App.Domain.Identity;
 using App.Public.DTO.v1;
@@ -29,7 +30,8 @@ public class VerificationController : ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(VerifyUser), StatusCodes.Status200OK)]
     public async Task<ActionResult<ResponseWithPaging<IEnumerable<VerifyUser>>>> GetAll(
-        [FromBody] RequestWithPaging requestWithPaging)
+        [FromQuery] [Range(1, int.MaxValue)] int pageNr = 1,
+        [FromQuery] [Range(1, 100)] int pageSize = 25)
     {
         var admins = await _userManager.GetUsersInRoleAsync("admin");
         
@@ -41,8 +43,8 @@ public class VerificationController : ControllerBase
                 Email = u.Email!,
                 IsVerified = u.IsVerified
             })
-            .Skip((requestWithPaging.PageNr - 1)  * requestWithPaging.PageSize)
-            .Take(requestWithPaging.PageSize)
+            .Skip((pageNr - 1)  * pageSize)
+            .Take(pageSize)
             .ToListAsync();
         
         var usersCount = _userManager.Users
@@ -51,9 +53,9 @@ public class VerificationController : ControllerBase
         return new ResponseWithPaging<IEnumerable<VerifyUser>>()
         {
             Data = users,
-            PageNr = requestWithPaging.PageNr,
-            PageSize = requestWithPaging.PageSize,
-            PageCount = usersCount / requestWithPaging.PageSize + (usersCount % requestWithPaging.PageSize == 0 ? 0 : 1)
+            PageNr = pageNr,
+            PageSize = pageSize,
+            PageCount = usersCount / pageSize + (usersCount % pageSize == 0 ? 0 : 1)
         };
     }
     
