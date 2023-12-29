@@ -34,10 +34,6 @@ public static class SeedingRunner
             throw new ApplicationException("Problem in services. Can't initialize logger");
         }
 
-        if (context.Database.ProviderName != null && context.Database.ProviderName.Contains("InMemory"))
-        {
-            return;
-        }
 
         // wait for db connection
         var startedAt = DateTime.UtcNow;
@@ -51,14 +47,15 @@ public static class SeedingRunner
             }
         }
 
+        var isInMemoryDb = context.Database.ProviderName?.Contains("InMemory") ?? false;
 
-        if (appConfiguration.GetValue<bool>("InitializeData:DropDatabase"))
+        if (!isInMemoryDb && appConfiguration.GetValue<bool>("InitializeData:DropDatabase"))
         {
             logger.LogWarning("Dropping database");
             DbInitializer.DropDatabase(context);
         }
 
-        if (appConfiguration.GetValue<bool>("InitializeData:MigrateDatabase"))
+        if (!isInMemoryDb && appConfiguration.GetValue<bool>("InitializeData:MigrateDatabase"))
         {
             logger.LogInformation("Migrating database");
             DbInitializer.MigrateDatabase(context);
