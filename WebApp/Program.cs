@@ -42,6 +42,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.ExpireTimeSpan = TimeSpan.FromHours(3);
     options.SlidingExpiration = true;
     options.Cookie.Name = "auth";
+    options.Cookie.SameSite = SameSiteMode.None;
     options.Events.OnRedirectToLogin = redirectContext =>
     {
         redirectContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -56,7 +57,7 @@ builder.Services.AddCors(options =>
     {
         policy.AllowAnyHeader();
         policy.AllowAnyMethod();
-        policy.WithOrigins("http://localhost:3000");
+        policy.WithOrigins("http://localhost:3000", "chrome-extension://aanmpkdkplnbekapamoimgnaajaphicj");
         policy.AllowCredentials();
     });
 });
