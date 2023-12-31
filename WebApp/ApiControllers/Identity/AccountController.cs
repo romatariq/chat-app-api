@@ -41,12 +41,20 @@ public class AccountController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Register([FromBody] Register registrationData)
     {
+        if (registrationData.Password != registrationData.ConfirmPassword)
+        {
+            return BadRequest(new ErrorResponse()
+            {
+                Error = "Password and confirm password must match."
+            });
+        }
+        
         var appUser = await _userManager.FindByEmailAsync(registrationData.Email);
         if (appUser != null)
         {
             return BadRequest(new ErrorResponse()
             {
-                Error = $"Email {registrationData.Email} already registered"
+                Error = $"Email {registrationData.Email} already registered."
             });
         }
         
@@ -55,7 +63,7 @@ public class AccountController : ControllerBase
         {
             return BadRequest(new ErrorResponse()
             {
-                Error = $"Username {registrationData.UserName} already registered"
+                Error = $"Username {registrationData.UserName} already registered."
             });
         }
 
