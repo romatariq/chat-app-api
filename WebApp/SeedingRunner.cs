@@ -71,6 +71,7 @@ public static class SeedingRunner
         if (appConfiguration.GetValue<bool>("InitializeData:SeedData"))
         {
             logger.LogInformation("Seeding initial app data");
+            await DbInitializer.SeedData(context);
         }
     }
 }

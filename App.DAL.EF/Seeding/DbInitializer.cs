@@ -1,4 +1,5 @@
-﻿using App.Domain.Identity;
+﻿using App.Domain;
+using App.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,6 +57,34 @@ public static class DbInitializer
         {
             throw new ApplicationException($"Cannot add role to admin, {result}");
         }
+    }
+    
+    public static async Task SeedData(AppDbContext ctx)
+    {
+        await SeedGroups(ctx);
+    }
+    
+    private static async Task SeedGroups(AppDbContext ctx)
+    {
+        if (ctx.Groups.Any()) return;
+
+        var group = new Group
+        {
+            Name = "Public all chat",
+            GroupType = EGroupType.All,
+        };
+
+        await ctx.Groups.AddAsync(group);
+
+        var groupUsers = await ctx.Users
+            .Select(u => new GroupUser
+            {
+                GroupId = group.Id,
+                UserId = u.Id
+            })
+            .ToListAsync();
+
+        await ctx.GroupUsers.AddRangeAsync(groupUsers);
     }
     
 }
