@@ -19,27 +19,38 @@ public static class DbInitializer
         ctx.Database.EnsureDeleted();
     }
     
-    private static void SeedRoles(RoleManager<AppRole> roleManager)
+    public static async Task SeedIdentity(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, string adminPassword)
     {
-        if (roleManager.Roles.Any()) return;
+        await SeedRoles(roleManager);
+        await SeedUsers(userManager, adminPassword);
+    }
+    
+    public static async Task SeedData(AppDbContext ctx)
+    {
+        await SeedGroups(ctx);
+    }
+    
+    private static async Task SeedRoles(RoleManager<AppRole> roleManager)
+    {
+        if (await roleManager.Roles.AnyAsync()) return;
+        
         var roles = new List<AppRole>
         {
             new() { Name = "admin" }
         };
         foreach (var role in roles)
         {
-            roleManager.CreateAsync(role).Wait();
+            await roleManager.CreateAsync(role);
         }
     }
     
-    public static async Task SeedIdentity(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, string adminPassword)
+    private static async Task SeedUsers(UserManager<AppUser> userManager, string adminPassword)
     {
-        SeedRoles(roleManager);
         (string email, string userName) adminData = ("admin@app.com", "Admin");
         var admin = await userManager.FindByEmailAsync(adminData.email);
         if (admin != null) return;
         
-        admin = new AppUser()
+        admin = new AppUser
         {
             Email = adminData.email,
             UserName = adminData.userName,
@@ -59,14 +70,9 @@ public static class DbInitializer
         }
     }
     
-    public static async Task SeedData(AppDbContext ctx)
-    {
-        await SeedGroups(ctx);
-    }
-    
     private static async Task SeedGroups(AppDbContext ctx)
     {
-        if (ctx.Groups.Any()) return;
+        if (await ctx.Groups.AnyAsync()) return;
 
         var group = new Group
         {
