@@ -65,11 +65,7 @@ public static class SeedingRunner
         {
             logger.LogInformation("Seeding identity");
             var adminPassword = appConfiguration.GetValue<string>("InitializeData:AdminPassword");
-            if (adminPassword == null)
-            {
-                throw new ApplicationException("Environment variable AdminPassword not configured");
-            }
-            DbInitializer.SeedIdentity(userManager, roleManager, adminPassword);
+            DbInitializer.SeedIdentity(userManager, roleManager, adminPassword!);
         }
 
         if (appConfiguration.GetValue<bool>("InitializeData:SeedData"))
