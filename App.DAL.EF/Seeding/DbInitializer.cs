@@ -31,11 +31,11 @@ public static class DbInitializer
         }
     }
     
-    public static void SeedIdentity(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, string adminPassword)
+    public static async Task SeedIdentity(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, string adminPassword)
     {
         SeedRoles(roleManager);
         (string email, string userName) adminData = ("admin@app.com", "Admin");
-        var admin = userManager.FindByEmailAsync(adminData.email).Result;
+        var admin = await userManager.FindByEmailAsync(adminData.email);
         if (admin != null) return;
         
         admin = new AppUser()
@@ -45,13 +45,13 @@ public static class DbInitializer
             EmailConfirmed = true, 
             IsVerified = true
         };
-        var result = userManager.CreateAsync(admin, adminPassword).Result;
+        var result = await userManager.CreateAsync(admin, adminPassword);
         if (!result.Succeeded)
         {
             throw new ApplicationException($"Cannot seed users, {result}");
         }
         
-        var roleAddResult = userManager.AddToRoleAsync(admin, "admin").Result;
+        var roleAddResult = await userManager.AddToRoleAsync(admin, "admin");
         if (!roleAddResult.Succeeded)
         {
             throw new ApplicationException($"Cannot add role to admin, {result}");

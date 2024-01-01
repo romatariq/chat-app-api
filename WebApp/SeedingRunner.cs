@@ -7,12 +7,12 @@ namespace WebApp;
 
 public static class SeedingRunner
 {
-    public static void SetupDb(IApplicationBuilder webApp, IConfiguration appConfiguration)
+    public static async Task SetupDb(IApplicationBuilder webApp, IConfiguration appConfiguration)
     {
         using var serviceScope = webApp.ApplicationServices
             .GetRequiredService<IServiceScopeFactory>()
             .CreateScope();
-        using var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
+        await using var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
 
 
         if (context == null)
@@ -65,7 +65,7 @@ public static class SeedingRunner
         {
             logger.LogInformation("Seeding identity");
             var adminPassword = appConfiguration.GetValue<string>("InitializeData:AdminPassword");
-            DbInitializer.SeedIdentity(userManager, roleManager, adminPassword!);
+            await DbInitializer.SeedIdentity(userManager, roleManager, adminPassword!);
         }
 
         if (appConfiguration.GetValue<bool>("InitializeData:SeedData"))

@@ -97,7 +97,7 @@ builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true
 var app = builder.Build();
 
 // Set up db
-SeedingRunner.SetupDb(app, app.Configuration);
+await SeedingRunner.SetupDb(app, app.Configuration);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
