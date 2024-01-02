@@ -73,5 +73,11 @@ public static class SeedingRunner
             logger.LogInformation("Seeding initial app data");
             await DbInitializer.SeedData(context);
         }
+        
+        if (appConfiguration.GetValue<bool>("InitializeData:SeedDevData"))
+        {
+            logger.LogInformation("Seeding random data for development");
+            await DbInitializer.SeedDevData(context);
+        }
     }
 }
