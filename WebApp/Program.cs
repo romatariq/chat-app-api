@@ -14,16 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-{
-    builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseInMemoryDatabase("dev"));
-}
-else
-{
-    builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseNpgsql(connectionString));
-}
+// builder.Services.AddDbContext<AppDbContext>(options =>
+//     options.UseInMemoryDatabase("dev"));
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
