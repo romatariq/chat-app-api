@@ -28,6 +28,7 @@ public static class DbInitializer
     public static async Task SeedData(AppDbContext ctx)
     {
         await SeedGroups(ctx);
+        await ctx.SaveChangesAsync();
     }
     
     private static async Task SeedRoles(RoleManager<AppRole> roleManager)
@@ -77,7 +78,7 @@ public static class DbInitializer
         var group = new Group
         {
             Name = "Public all chat",
-            GroupType = EGroupType.All,
+            GroupType = EGroupType.All
         };
 
         await ctx.Groups.AddAsync(group);
