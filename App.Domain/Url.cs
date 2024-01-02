@@ -6,10 +6,10 @@ namespace App.Domain;
 public class Url: DomainEntityId
 {
     [MaxLength(1000)]
-    public string Path { get; set; } = default!;
+    public string? Path { get; set; }
 
     [MaxLength(1000)]
-    public string Params { get; set; } = default!;
+    public string? Params { get; set; }
 
     
     public Guid WebDomainId { get; set; }
