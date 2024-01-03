@@ -49,8 +49,12 @@ public class CommentsController: ControllerBase
                 Error = "Invalid user/group."
             });
         }
-
-        // TODO: proper url handling - decode and parse into domain/path/params without unnecessary symbols
+        
+        var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(url);
+        Console.WriteLine($"domain: {domain}");
+        Console.WriteLine($"path: {path}");
+        Console.WriteLine($"params: {parameters}");
+        
         var commentsQuery = _ctx.Comments
             .Include(c => c.Url)
             .ThenInclude(u => u!.WebDomain)
@@ -58,7 +62,9 @@ public class CommentsController: ControllerBase
             .Include(c => c.CommentReactions)
             .Where(c =>
                 c.GroupId == groupId &&
-                c.Url!.WebDomain!.Name == url)
+                c.Url!.WebDomain!.Name == domain &&
+                c.Url.Path == path &&
+                c.Url.Params == parameters)
             .Select(c => new Comment
             {
                 Id = c.Id,
