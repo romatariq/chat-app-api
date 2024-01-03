@@ -50,7 +50,7 @@ public class CommentsController: ControllerBase
             });
         }
 
-        // TODO: proper url validation/parsing into domain/path/params
+        // TODO: proper url handling - decode and parse into domain/path/params without unnecessary symbols
         var commentsQuery = _ctx.Comments
             .Include(c => c.Url)
             .ThenInclude(u => u!.WebDomain)

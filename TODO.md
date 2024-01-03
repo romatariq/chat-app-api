@@ -7,5 +7,6 @@
 - [X] Add paging (verificationController getAll)
 - [ ] Add external (google) login, maybe even remove own register to avoid implementing email confirmation etc.
 - [ ] Remove verify user controller, no reason for it
+- [ ] Add hard coded admin id for dev (so cookies wouldn't display userId that doesn't exist)
 
 - [ ] Fix all TODOs
