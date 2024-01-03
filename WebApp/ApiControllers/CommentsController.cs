@@ -50,13 +50,15 @@ public class CommentsController: ControllerBase
             });
         }
 
+        // TODO: proper url validation/parsing into domain/path/params
         var commentsQuery = _ctx.Comments
             .Include(c => c.Url)
+            .ThenInclude(u => u!.WebDomain)
             .Include(c => c.User)
             .Include(c => c.CommentReactions)
             .Where(c =>
                 c.GroupId == groupId &&
-                c.Url!.Path == url)
+                c.Url!.WebDomain!.Name == url)
             .Select(c => new Comment
             {
                 Id = c.Id,
