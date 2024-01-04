@@ -106,8 +106,7 @@ public class CommentsController : ControllerBase
     public async Task<ActionResult<Comment>> Add(
         [FromRoute] string url,
         [FromRoute] Guid groupId,
-        [FromBody] [MaxLength(1000), MinLength(1)]
-        string text)
+        [FromBody] PostComment postComment)
     {
         var userId = User.GetUserId();
 
@@ -152,7 +151,7 @@ public class CommentsController : ControllerBase
 
         var comment = new App.Domain.Comment()
         {
-            Text = text,
+            Text = postComment.Text,
             GroupId = groupId,
             UserId = userId,
             UrlId = urlId.Value
