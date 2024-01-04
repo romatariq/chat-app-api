@@ -9,4 +9,11 @@ public static class IdentityHelpers
         return Guid.Parse(
             user.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
     }
+    
+    public static string GetUsername(this ClaimsPrincipal user)
+    {
+        return user.Claims
+            .Single(c => c.Type == ClaimTypes.Name)
+            .Value;
+    }
 }

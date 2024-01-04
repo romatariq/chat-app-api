@@ -16,7 +16,7 @@ namespace WebApp.ApiControllers;
 [Authorize]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]/url/{url}/group/{groupId:guid}")]
-public class CommentsController: ControllerBase
+public class CommentsController : ControllerBase
 {
     private readonly AppDbContext _ctx;
 
@@ -24,7 +24,7 @@ public class CommentsController: ControllerBase
     {
         _ctx = ctx;
     }
-    
+
     [HttpGet]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(ResponseWithPaging<IEnumerable<Comment>>), StatusCodes.Status200OK)]
@@ -38,10 +38,10 @@ public class CommentsController: ControllerBase
         var userId = User.GetUserId();
 
         var userInGroup = await _ctx.GroupUsers
-            .AnyAsync(gu => 
-                gu.UserId == userId && 
+            .AnyAsync(gu =>
+                gu.UserId == userId &&
                 gu.GroupId == groupId);
-        
+
         if (!userInGroup)
         {
             return BadRequest(new ErrorResponse
@@ -49,12 +49,9 @@ public class CommentsController: ControllerBase
                 Error = "Invalid user/group."
             });
         }
-        
+
         var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(url);
-        Console.WriteLine($"domain: {domain}");
-        Console.WriteLine($"path: {path}");
-        Console.WriteLine($"params: {parameters}");
-        
+
         var commentsQuery = _ctx.Comments
             .Include(c => c.Url)
             .ThenInclude(u => u!.WebDomain)
@@ -98,6 +95,78 @@ public class CommentsController: ControllerBase
             PageNr = pageNr,
             PageSize = pageSize,
             PageCount = totalCommentsCount / pageSize + (totalCommentsCount % pageSize == 0 ? 0 : 1)
+        };
+    }
+
+
+    [HttpPost]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(Comment), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<Comment>> Add(
+        [FromRoute] string url,
+        [FromRoute] Guid groupId,
+        [FromBody] [MaxLength(1000), MinLength(1)]
+        string text)
+    {
+        var userId = User.GetUserId();
+
+        var userInGroup = await _ctx.GroupUsers
+            .AnyAsync(gu =>
+                gu.UserId == userId &&
+                gu.GroupId == groupId);
+
+        if (!userInGroup)
+        {
+            return BadRequest(new ErrorResponse
+            {
+                Error = "Invalid user/group."
+            });
+        }
+
+        var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(url);
+
+        Guid? domainId = await _ctx.WebDomains
+            .Where(d => d.Name == domain)
+            .Select(d => d.Id)
+            .SingleOrDefaultAsync();
+        
+        domainId ??= (await _ctx.WebDomains
+                .AddAsync(new WebDomain()
+                {
+                    Name = domain
+                })).Entity.Id;
+        
+        Guid? urlId = await _ctx.Urls
+            .Where(u => u.Path == path && u.Params == parameters)
+            .Select(u => u.Id)
+            .SingleOrDefaultAsync();
+        
+        urlId ??= (await _ctx.Urls
+                .AddAsync(new Url()
+                {
+                    WebDomainId = domainId.Value,
+                    Path = path,
+                    Params = parameters
+                })).Entity.Id;
+
+        var comment = new App.Domain.Comment()
+        {
+            Text = text,
+            GroupId = groupId,
+            UserId = userId,
+            UrlId = urlId.Value
+        };
+
+        await _ctx.Comments.AddAsync(comment);
+        await _ctx.SaveChangesAsync();
+
+        return new Comment()
+        {
+            Text = comment.Text,
+            Username = User.GetUsername(),
+            CreatedAtUtc = DateTime.UtcNow,
+            Id = comment.Id
         };
     }
 }
