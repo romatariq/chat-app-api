@@ -125,9 +125,9 @@ public class CommentsController : ControllerBase
 
         var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(url);
 
-        Guid? domainId = await _ctx.WebDomains
+        var domainId = await _ctx.WebDomains
             .Where(d => d.Name == domain)
-            .Select(d => d.Id)
+            .Select(d => (Guid?) d.Id)
             .SingleOrDefaultAsync();
         
         domainId ??= (await _ctx.WebDomains
@@ -136,9 +136,12 @@ public class CommentsController : ControllerBase
                     Name = domain
                 })).Entity.Id;
         
-        Guid? urlId = await _ctx.Urls
-            .Where(u => u.Path == path && u.Params == parameters)
-            .Select(u => u.Id)
+        var urlId = await _ctx.Urls
+            .Where(u => 
+                u.WebDomainId == domainId &&
+                u.Path == path &&
+                u.Params == parameters)
+            .Select(u => (Guid?) u.Id)
             .SingleOrDefaultAsync();
         
         urlId ??= (await _ctx.Urls
