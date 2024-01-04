@@ -94,7 +94,7 @@ public class CommentsController : ControllerBase
                 .ToListAsync(),
             PageNr = pageNr,
             PageSize = pageSize,
-            PageCount = totalCommentsCount / pageSize + (totalCommentsCount % pageSize == 0 ? 0 : 1)
+            PageCount = Math.Max(1, totalCommentsCount / pageSize + (totalCommentsCount % pageSize == 0 ? 0 : 1))
         };
     }
 
