@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using App.DAL.EF;
 using App.Domain;
+using App.Helpers;
 using App.Public.DTO.v1;
 using Asp.Versioning;
 using Base.Helpers;
@@ -33,7 +34,8 @@ public class CommentsController : ControllerBase
         [FromRoute] string url,
         [FromRoute] Guid groupId,
         [FromQuery] [Range(1, int.MaxValue)] int pageNr = 1,
-        [FromQuery] [Range(1, 100)] int pageSize = 25)
+        [FromQuery] [Range(1, 100)] int pageSize = 25,
+        [FromQuery]  ESort sort = ESort.Top)
     {
         var userId = User.GetUserId();
 
@@ -62,6 +64,7 @@ public class CommentsController : ControllerBase
                 c.Url!.WebDomain!.Name == domain &&
                 c.Url.Path == path &&
                 c.Url.Params == parameters)
+            .SortComments(sort)
             .Select(c => new Comment
             {
                 Id = c.Id,
