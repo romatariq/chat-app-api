@@ -1,3 +1,4 @@
+using App.Contracts.DAL;
 using App.DAL.EF;
 using App.Domain.Identity;
 using Asp.Versioning;
@@ -22,7 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// builder.Services.AddScoped<IAppUOW, AppUOW>();
+builder.Services.AddScoped<IAppUOW, AppUOW>();
 
 builder.Services.AddIdentity<AppUser, AppRole>(
         options => options.SignIn.RequireConfirmedAccount = false)

@@ -6,15 +6,12 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-
     <ItemGroup>
-      <ProjectReference Include="..\Base.Contracts.Domain\Base.Contracts.Domain.csproj" />
-      <ProjectReference Include="..\Base.Domain\Base.Domain.csproj" />
+      <ProjectReference Include="..\Base.Contracts.DAL\Base.Contracts.DAL.csproj" />
     </ItemGroup>
 
-
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.14" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.14" />
     </ItemGroup>
 
 </Project>
