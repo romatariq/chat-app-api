@@ -1,4 +1,4 @@
-using App.Public.DTO.v1;
+using App.DTO.Public.v1;
 using Base.Contracts.DAL;
 using Dal = App.Private.DTO.DAL;
 namespace App.Contracts.DAL.IRepositories;

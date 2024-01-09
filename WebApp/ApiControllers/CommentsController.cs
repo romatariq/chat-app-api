@@ -2,14 +2,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using App.DAL.EF;
 using App.Domain;
+using App.DTO.Public.v1;
 using App.Helpers;
-using App.Public.DTO.v1;
 using Asp.Versioning;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Comment = App.Public.DTO.v1.Comment;
+using Comment = App.DTO.Public.v1.Comment;
 
 namespace WebApp.ApiControllers;
 

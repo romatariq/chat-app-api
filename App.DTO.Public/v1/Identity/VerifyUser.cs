@@ -1,4 +1,4 @@
-namespace App.Public.DTO.v1.Identity;
+namespace App.DTO.Public.v1.Identity;
 
 public class VerifyUser
 {

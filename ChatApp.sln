@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{853F1AF2-9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{E2B2DD50-CF4E-49F1-BDF5-3BEC3D4306DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Public.DTO", "App.Public.DTO\App.Public.DTO.csproj", "{8127045E-91D9-4E3D-A3AF-B0F578C1690C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.DTO.Public", "App.DTO.Public\App.DTO.Public.csproj", "{8127045E-91D9-4E3D-A3AF-B0F578C1690C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Helpers", "Base.Helpers\Base.Helpers.csproj", "{3D9AEAE9-EB4E-42CC-9F15-37E0A69313FB}"
 EndProject

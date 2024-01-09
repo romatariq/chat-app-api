@@ -1,5 +1,5 @@
 ﻿using App.Domain;
-using App.Public.DTO.v1;
+using App.DTO.Public.v1;
 using Comment = App.Domain.Comment;
 
 namespace App.Helpers;

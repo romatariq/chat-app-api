@@ -1,6 +1,6 @@
 using System.Net.Mime;
 using App.DAL.EF;
-using App.Public.DTO.v1;
+using App.DTO.Public.v1;
 using Asp.Versioning;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;

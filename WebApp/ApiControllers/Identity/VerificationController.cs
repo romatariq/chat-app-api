@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using App.Domain.Identity;
-using App.Public.DTO.v1;
-using App.Public.DTO.v1.Identity;
+using App.DTO.Public.v1;
+using App.DTO.Public.v1.Identity;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

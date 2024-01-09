@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace App.Public.DTO.v1;
+namespace App.DTO.Public.v1;
 
 public class PostComment
 {

@@ -1,6 +1,6 @@
 using App.Contracts.DAL.IRepositories;
+using App.DTO.Public.v1;
 using App.Helpers;
-using App.Public.DTO.v1;
 using Base.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Dal = App.Private.DTO.DAL;

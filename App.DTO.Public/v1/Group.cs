@@ -1,6 +1,6 @@
 using App.Domain;
 
-namespace App.Public.DTO.v1;
+namespace App.DTO.Public.v1;
 
 public class Group
 {
