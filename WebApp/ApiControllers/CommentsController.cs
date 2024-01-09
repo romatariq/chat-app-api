@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using App.DAL.EF;
 using App.Domain;
+using App.Domain.Enums;
 using App.DTO.Public.v1;
 using App.Helpers;
 using Asp.Versioning;

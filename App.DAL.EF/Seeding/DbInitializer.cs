@@ -1,4 +1,5 @@
 ﻿using App.Domain;
+using App.Domain.Enums;
 using App.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

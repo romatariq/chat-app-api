@@ -1,4 +1,4 @@
-namespace App.Domain;
+namespace App.Domain.Enums;
 
 public enum EReportType
 {

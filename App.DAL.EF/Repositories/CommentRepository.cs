@@ -1,4 +1,5 @@
 using App.Contracts.DAL.IRepositories;
+using App.Domain.Enums;
 using App.DTO.Public.v1;
 using App.Helpers;
 using Base.DAL.EF;
@@ -35,17 +36,17 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
                 Username = c.User!.UserName!,
                 Likes = c.CommentReactions!
                     .Count(cr =>
-                        cr.ReactionType == Domain.ECommentReactionType.Like),
+                        cr.ReactionType == ECommentReactionType.Like),
                 Dislikes = c.CommentReactions!
                     .Count(cr =>
-                        cr.ReactionType == Domain.ECommentReactionType.Dislike),
+                        cr.ReactionType == ECommentReactionType.Dislike),
                 HasUserLiked = c.CommentReactions!
                     .Any(cr =>
-                        cr.ReactionType == Domain.ECommentReactionType.Like &&
+                        cr.ReactionType == ECommentReactionType.Like &&
                         cr.UserId == userId),
                 HasUserDisliked = c.CommentReactions!
                     .Any(cr =>
-                        cr.ReactionType == Domain.ECommentReactionType.Dislike &&
+                        cr.ReactionType == ECommentReactionType.Dislike &&
                         cr.UserId == userId)
             })
             .AsQueryable();

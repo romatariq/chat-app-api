@@ -1,4 +1,5 @@
 ﻿using App.Domain;
+using App.Domain.Enums;
 using App.DTO.Public.v1;
 using Comment = App.Domain.Comment;
 

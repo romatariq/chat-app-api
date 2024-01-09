@@ -1,3 +1,4 @@
+using App.Domain.Enums;
 using App.Domain.Identity;
 using Base.Domain;
 

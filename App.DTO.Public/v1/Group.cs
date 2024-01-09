@@ -1,4 +1,5 @@
 using App.Domain;
+using App.Domain.Enums;
 
 namespace App.DTO.Public.v1;
 
