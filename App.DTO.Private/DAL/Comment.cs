@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Base.Contracts.Domain;
 
-namespace App.Private.DTO.DAL;
+namespace App.DTO.Private.DAL;
 
 public class Comment : IDomainEntityId
 {

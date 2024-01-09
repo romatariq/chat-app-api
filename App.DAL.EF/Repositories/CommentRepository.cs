@@ -3,7 +3,7 @@ using App.DTO.Public.v1;
 using App.Helpers;
 using Base.DAL.EF;
 using Microsoft.EntityFrameworkCore;
-using Dal = App.Private.DTO.DAL;
+using Dal = App.DTO.Private.DAL;
 using Domain = App.Domain;
 
 namespace App.DAL.EF.Repositories;

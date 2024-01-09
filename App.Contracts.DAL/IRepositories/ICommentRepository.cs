@@ -1,6 +1,6 @@
 using App.DTO.Public.v1;
 using Base.Contracts.DAL;
-using Dal = App.Private.DTO.DAL;
+using Dal = App.DTO.Private.DAL;
 namespace App.Contracts.DAL.IRepositories;
 
 public interface ICommentRepository: IBaseRepository<Dal.Comment>, ICommentRepositoryCustom<Dal.Comment>

@@ -39,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Contracts.DAL", "App.Contracts.DAL\App.Contracts.DAL.csproj", "{FC607DE8-D16A-4627-A9E5-D69A87986CCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Private.DTO", "App.Private.DTO\App.Private.DTO.csproj", "{AC65CA59-AB21-4B41-97BD-FF12FE75E520}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.DTO.Private", "App.DTO.Private\App.DTO.Private.csproj", "{AC65CA59-AB21-4B41-97BD-FF12FE75E520}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
