@@ -1,6 +1,9 @@
+using App.BLL;
+using App.Contracts.BLL;
 using App.Contracts.DAL;
 using App.DAL.EF;
 using App.Domain.Identity;
+using App.Mappers.AutoMapperConfigs;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +27,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddScoped<IAppUOW, AppUOW>();
+builder.Services.AddScoped<IAppBLL, AppBLL>();
 
 builder.Services.AddIdentity<AppUser, AppRole>(
         options => options.SignIn.RequireConfirmedAccount = false)
@@ -84,10 +88,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 
-// builder.Services.AddAutoMapper(
-//     typeof(App.Mappers.AutoMapperConfigs.PublicDTOConfig),
-//     typeof(App.Mappers.AutoMapperConfigs.BLLConfig)
-// );
+builder.Services.AddAutoMapper(
+    typeof(BLLConfig)
+);
 
 
 var app = builder.Build();

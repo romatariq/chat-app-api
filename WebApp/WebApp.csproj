@@ -11,6 +11,7 @@
         <PackageReference Include="Asp.Versioning.Http" Version="8.0.0" />
         <PackageReference Include="Asp.Versioning.Mvc" Version="8.0.0" />
         <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
@@ -24,9 +25,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\App.BLL\App.BLL.csproj" />
       <ProjectReference Include="..\App.DAL.EF\App.DAL.EF.csproj" />
       <ProjectReference Include="..\App.Helpers\App.Helpers.csproj" />
       <ProjectReference Include="..\App.DTO.Public\App.DTO.Public.csproj" />
+      <ProjectReference Include="..\App.Mappers\App.Mappers.csproj" />
       <ProjectReference Include="..\Base.Helpers\Base.Helpers.csproj" />
     </ItemGroup>
     
