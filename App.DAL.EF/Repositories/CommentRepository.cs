@@ -53,8 +53,7 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
             .AsQueryable();
 
         var comments = await commentsQuery
-            .Skip((pageNr - 1) * pageSize)
-            .Take(pageSize)
+            .Paging(pageNr, pageSize)
             .ToListAsync();
         var totalCommentsCount = await commentsQuery.CountAsync();
         return (comments, totalCommentsCount.GetPageCount(pageSize));
