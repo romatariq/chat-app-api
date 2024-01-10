@@ -3,6 +3,7 @@ using App.Domain.Enums;
 using App.DTO.Public.v1;
 using App.Helpers;
 using Base.DAL.EF;
+using Base.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Dal = App.DTO.Private.DAL;
 using Domain = App.Domain;
@@ -15,7 +16,7 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
     {
     }
 
-    public async Task<(IEnumerable<Dal.Comment> data, int pageCount)> GetAll(Guid groupId, Guid userId, string domain, string? path, string? parameters, ESort sort, int pageNr, int pageSize)
+    public async Task<(IEnumerable<Dal.Comment> comments, int totalPageCount)> GetAll(Guid groupId, Guid userId, string domain, string? path, string? parameters, ESort sort, int pageNr, int pageSize)
     {
         var commentsQuery = DbSet
             .Include(c => c.Url)
@@ -56,6 +57,6 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
             .Take(pageSize)
             .ToListAsync();
         var totalCommentsCount = await commentsQuery.CountAsync();
-        return (comments, totalCommentsCount);
+        return (comments, totalCommentsCount.GetPageCount(pageSize));
     }
 }

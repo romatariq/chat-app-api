@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
+using App.Contracts.BLL;
 using App.DAL.EF;
 using App.Domain;
-using App.Domain.Enums;
 using App.DTO.Public.v1;
-using App.Helpers;
+using App.Mappers.AutoMappers.PublicDTO;
 using Asp.Versioning;
+using AutoMapper;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,10 +22,14 @@ namespace WebApp.ApiControllers;
 public class CommentsController : ControllerBase
 {
     private readonly AppDbContext _ctx;
+    private readonly IAppBLL _uow;
+    private readonly CommentMapper _commentMapper;
 
-    public CommentsController(AppDbContext ctx)
+    public CommentsController(AppDbContext ctx, IAppBLL uow, IMapper autoMapper)
     {
         _ctx = ctx;
+        _uow = uow;
+        _commentMapper = new CommentMapper(autoMapper);
     }
 
     [HttpGet]
@@ -55,50 +60,15 @@ public class CommentsController : ControllerBase
 
         var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(url);
 
-        var commentsQuery = _ctx.Comments
-            .Include(c => c.Url)
-            .ThenInclude(u => u!.WebDomain)
-            .Include(c => c.User)
-            .Include(c => c.CommentReactions)
-            .Where(c =>
-                c.GroupId == groupId &&
-                c.Url!.WebDomain!.Name == domain &&
-                c.Url.Path == path &&
-                c.Url.Params == parameters)
-            .SortComments(sort)
-            .Select(c => new Comment
-            {
-                Id = c.Id,
-                CreatedAtUtc = c.CreatedAtUtc,
-                Text = c.Text,
-                Username = c.User!.UserName!,
-                Likes = c.CommentReactions!
-                    .Count(cr =>
-                        cr.ReactionType == ECommentReactionType.Like),
-                Dislikes = c.CommentReactions!
-                    .Count(cr =>
-                        cr.ReactionType == ECommentReactionType.Dislike),
-                HasUserLiked = c.CommentReactions!
-                    .Any(cr =>
-                        cr.ReactionType == ECommentReactionType.Like &&
-                        cr.UserId == userId),
-                HasUserDisliked = c.CommentReactions!
-                    .Any(cr =>
-                        cr.ReactionType == ECommentReactionType.Dislike &&
-                        cr.UserId == userId)
-            })
-            .AsQueryable();
+        var (comments, pageCount) = await _uow.CommentService
+                .GetAll(groupId, userId, domain, path, parameters, sort, pageNr, pageSize);
 
-        var totalCommentsCount = await commentsQuery.CountAsync();
         return new ResponseWithPaging<IEnumerable<Comment>>
         {
-            Data = await commentsQuery
-                .Skip((pageNr - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync(),
+            Data = comments.Select(_commentMapper.Map)!,
             PageNr = pageNr,
             PageSize = pageSize,
-            PageCount = Math.Max(1, totalCommentsCount / pageSize + (totalCommentsCount % pageSize == 0 ? 0 : 1))
+            PageCount = pageCount
         };
     }
 

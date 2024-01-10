@@ -11,6 +11,7 @@
       <ProjectReference Include="..\App.Domain\App.Domain.csproj" />
       <ProjectReference Include="..\App.Helpers\App.Helpers.csproj" />
       <ProjectReference Include="..\Base.DAL.EF\Base.DAL.EF.csproj" />
+      <ProjectReference Include="..\Base.Helpers\Base.Helpers.csproj" />
     </ItemGroup>
 
     <ItemGroup>
