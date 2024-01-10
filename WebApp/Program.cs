@@ -89,7 +89,8 @@ builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true
 
 
 builder.Services.AddAutoMapper(
-    typeof(BLLConfig)
+    typeof(BLLConfig),
+    typeof(PublicDTOConfig)
 );
 
 

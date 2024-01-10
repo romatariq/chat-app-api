@@ -19,9 +19,11 @@ public class CommentService: BaseService<Dal.Comment, Bll.Comment, ICommentRepos
         Uow = uow;
     }
 
-    public async Task<(IEnumerable<Dal.Comment> data, int pageCount)> GetAll(Guid groupId, Guid userId, string domain, string? path, string? parameters, ESort sort, int pageNr,
+    public async Task<(IEnumerable<Bll.Comment> data, int pageCount)> GetAll(Guid groupId, Guid userId, string domain, string? path, string? parameters, ESort sort, int pageNr,
         int pageSize)
     {
-        throw new NotImplementedException();
+        var (comments, pageCount) = await Uow.CommentRepository.GetAll(groupId, userId, domain, path, parameters, sort, pageNr, pageSize);
+        var bllComments = comments.Select(Mapper.Map);
+        return (bllComments, pageCount)!;
     }
 }
