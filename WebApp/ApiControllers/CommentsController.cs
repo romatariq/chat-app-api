@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using App.Contracts.BLL;
-using App.DAL.EF;
 using App.DTO.Public.v1;
 using App.Mappers.AutoMappers.PublicDTO;
 using Asp.Versioning;
@@ -19,13 +18,11 @@ namespace WebApp.ApiControllers;
 [Route("api/v{version:apiVersion}/[controller]/url/{url}/group/{groupId:guid}")]
 public class CommentsController : ControllerBase
 {
-    private readonly AppDbContext _ctx;
     private readonly IAppBLL _uow;
     private readonly CommentMapper _commentMapper;
 
-    public CommentsController(AppDbContext ctx, IAppBLL uow, IMapper autoMapper)
+    public CommentsController(IAppBLL uow, IMapper autoMapper)
     {
-        _ctx = ctx;
         _uow = uow;
         _commentMapper = new CommentMapper(autoMapper);
     }
