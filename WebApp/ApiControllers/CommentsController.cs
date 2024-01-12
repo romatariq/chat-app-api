@@ -99,39 +99,15 @@ public class CommentsController : ControllerBase
 
         var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(url);
 
-        var domainId = await _ctx.WebDomains
-            .Where(d => d.Name == domain)
-            .Select(d => (Guid?) d.Id)
-            .SingleOrDefaultAsync();
-        
-        domainId ??= (await _ctx.WebDomains
-                .AddAsync(new WebDomain()
-                {
-                    Name = domain
-                })).Entity.Id;
-        
-        var urlId = await _ctx.Urls
-            .Where(u => 
-                u.WebDomainId == domainId &&
-                u.Path == path &&
-                u.Params == parameters)
-            .Select(u => (Guid?) u.Id)
-            .SingleOrDefaultAsync();
-        
-        urlId ??= (await _ctx.Urls
-                .AddAsync(new Url()
-                {
-                    WebDomainId = domainId.Value,
-                    Path = path,
-                    Params = parameters
-                })).Entity.Id;
+        var domainId = await _uow.UrlService.GetOrCreateDomainId(domain);
+        var urlId = await _uow.UrlService.GetOrCreateUrlId(domainId, path, parameters);
 
         var comment = new App.Domain.Comment()
         {
             Text = postComment.Text,
             GroupId = groupId,
             UserId = userId,
-            UrlId = urlId.Value
+            UrlId = urlId
         };
 
         await _ctx.Comments.AddAsync(comment);

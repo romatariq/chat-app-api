@@ -6,4 +6,5 @@ namespace App.Contracts.BLL;
 public interface IAppBLL: IBaseBLL
 {
     ICommentService CommentService { get; }
+    IUrlService UrlService { get; }
 }

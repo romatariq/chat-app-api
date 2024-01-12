@@ -13,8 +13,12 @@ public class AppUOW : EfBaseUOW<AppDbContext>, IAppUOW
     }
 
     private ICommentRepository? _commentRepository;
+    private IUrlRepository? _urlRepository;
     
  
     public ICommentRepository CommentRepository =>
         _commentRepository ??= new CommentRepository(DbContext);
+    
+    public IUrlRepository UrlRepository =>
+        _urlRepository ??= new UrlRepository(DbContext);
 }

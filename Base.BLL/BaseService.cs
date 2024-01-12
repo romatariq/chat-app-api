@@ -5,8 +5,7 @@ using Base.Contracts.Domain;
 
 namespace Base.BLL;
 
-public class
-    BaseService<TDalEntity, TBllEntity, TRepository> :
+public class BaseService<TDalEntity, TBllEntity, TRepository> :
     BaseService<TDalEntity, TBllEntity, TRepository, Guid>, IService<TBllEntity>
     where TDalEntity : class, IDomainEntityId
     where TBllEntity : class, IDomainEntityId

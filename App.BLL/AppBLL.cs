@@ -17,8 +17,12 @@ public class AppBLL : BaseBLL<IAppUOW>, IAppBLL
 
 
     private ICommentService? _commentService;
+    private IUrlService? _urlService;
     
     
     public ICommentService CommentService =>
         _commentService ??= new CommentService(Uow, _mapper);
+    
+    public IUrlService UrlService =>
+        _urlService ??= new UrlService(Uow);
 }
