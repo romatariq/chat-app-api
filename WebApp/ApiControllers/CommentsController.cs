@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using App.Contracts.BLL;
 using App.DAL.EF;
-using App.Domain;
 using App.DTO.Public.v1;
 using App.Mappers.AutoMappers.PublicDTO;
 using Asp.Versioning;
@@ -101,24 +100,10 @@ public class CommentsController : ControllerBase
 
         var domainId = await _uow.UrlService.GetOrCreateDomainId(domain);
         var urlId = await _uow.UrlService.GetOrCreateUrlId(domainId, path, parameters);
+        
+        var comment = await _uow.CommentService.Add(urlId, groupId, userId, postComment.Text, User.GetUsername());
+        await _uow.SaveChangesAsync();
 
-        var comment = new App.Domain.Comment()
-        {
-            Text = postComment.Text,
-            GroupId = groupId,
-            UserId = userId,
-            UrlId = urlId
-        };
-
-        await _ctx.Comments.AddAsync(comment);
-        await _ctx.SaveChangesAsync();
-
-        return new Comment()
-        {
-            Text = comment.Text,
-            Username = User.GetUsername(),
-            CreatedAtUtc = DateTime.UtcNow,
-            Id = comment.Id
-        };
+        return _commentMapper.Map(comment)!;
     }
 }

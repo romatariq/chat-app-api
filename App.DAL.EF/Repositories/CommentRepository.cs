@@ -58,4 +58,24 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
         var totalCommentsCount = await commentsQuery.CountAsync();
         return (comments, totalCommentsCount.GetPageCount(pageSize));
     }
+
+    public async Task<Dal.Comment> Add(Guid urlId, Guid groupId, Guid userId, string text, string username)
+    {
+        var comment = new Domain.Comment
+        {
+            Text = text,
+            GroupId = groupId,
+            UserId = userId,
+            UrlId = urlId
+        };
+        await DbSet.AddAsync(comment);
+
+        return new Dal.Comment
+        {
+            Id = comment.Id,
+            CreatedAtUtc = comment.CreatedAtUtc,
+            Text = comment.Text,
+            Username = username
+        };
+    }
 }

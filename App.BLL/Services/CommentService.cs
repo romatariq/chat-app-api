@@ -11,19 +11,23 @@ namespace App.BLL.Services;
 
 public class CommentService: BaseService<Dal.Comment, Bll.Comment, ICommentRepository>, ICommentService
 {
-    protected IAppUOW Uow;
 
     public CommentService(IAppUOW uow, AutoMapper.IMapper mapper)
         : base(uow.CommentRepository, new AutoMappers.BLL.CommentMapper(mapper))
     {
-        Uow = uow;
     }
 
     public async Task<(IEnumerable<Bll.Comment> comments, int totalPageCount)> GetAll(Guid groupId, Guid userId, string domain, string? path, string? parameters, ESort sort, int pageNr,
         int pageSize)
     {
-        var (comments, pageCount) = await Uow.CommentRepository.GetAll(groupId, userId, domain, path, parameters, sort, pageNr, pageSize);
+        var (comments, pageCount) = await Repository.GetAll(groupId, userId, domain, path, parameters, sort, pageNr, pageSize);
         var bllComments = comments.Select(Mapper.Map);
         return (bllComments, pageCount)!;
+    }
+
+    public async Task<Bll.Comment> Add(Guid urlId, Guid groupId, Guid userId, string text, string username)
+    {
+        var comment = await Repository.Add(urlId, groupId, userId, text, username);
+        return Mapper.Map(comment)!;
     }
 }
