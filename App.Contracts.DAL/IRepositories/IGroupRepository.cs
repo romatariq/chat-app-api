@@ -1,4 +1,3 @@
-using App.DTO.Public.v1;
 using Base.Contracts.DAL;
 using Dal = App.DTO.Private.DAL;
 namespace App.Contracts.DAL.IRepositories;
@@ -12,4 +11,5 @@ public interface IGroupRepositoryCustom<TEntity>
 {
     // custom methods shared between repository and service
     Task<IEnumerable<TEntity>> GetAll(Guid userId);
+    Task<bool> IsUserInGroup(Guid userId, Guid groupId);
 }

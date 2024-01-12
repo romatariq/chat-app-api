@@ -9,7 +9,6 @@ using AutoMapper;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Comment = App.DTO.Public.v1.Comment;
 
 namespace WebApp.ApiControllers;
@@ -44,11 +43,7 @@ public class CommentsController : ControllerBase
     {
         var userId = User.GetUserId();
 
-        var userInGroup = await _ctx.GroupUsers
-            .AnyAsync(gu =>
-                gu.UserId == userId &&
-                gu.GroupId == groupId);
-
+        var userInGroup = await _uow.GroupService.IsUserInGroup(userId, groupId);
         if (!userInGroup)
         {
             return BadRequest(new ErrorResponse
@@ -83,11 +78,7 @@ public class CommentsController : ControllerBase
     {
         var userId = User.GetUserId();
 
-        var userInGroup = await _ctx.GroupUsers
-            .AnyAsync(gu =>
-                gu.UserId == userId &&
-                gu.GroupId == groupId);
-
+        var userInGroup = await _uow.GroupService.IsUserInGroup(userId, groupId);
         if (!userInGroup)
         {
             return BadRequest(new ErrorResponse

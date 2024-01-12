@@ -22,4 +22,9 @@ public class GroupService: BaseService<Dal.Group, Bll.Group, IGroupRepository>, 
         var groups = await Repository.GetAll(userId);
         return groups.Select(Mapper.Map)!;
     }
+
+    public async Task<bool> IsUserInGroup(Guid userId, Guid groupId)
+    {
+        return await Repository.IsUserInGroup(userId, groupId);
+    }
 }

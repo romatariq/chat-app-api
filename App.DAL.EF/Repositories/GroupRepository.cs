@@ -26,4 +26,12 @@ public class GroupRepository: EfBaseRepository<Group, AppDbContext>, IGroupRepos
             })
             .ToListAsync();
     }
+
+    public async Task<bool> IsUserInGroup(Guid userId, Guid groupId)
+    {
+        return await DbContext.GroupUsers
+            .AnyAsync(gu =>
+                gu.UserId == userId &&
+                gu.GroupId == groupId);
+    }
 }
