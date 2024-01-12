@@ -1,11 +1,12 @@
 using System.Net.Mime;
-using App.DAL.EF;
+using App.Contracts.BLL;
 using App.DTO.Public.v1;
+using App.Mappers.AutoMappers.PublicDTO;
 using Asp.Versioning;
+using AutoMapper;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.ApiControllers;
 
@@ -15,11 +16,13 @@ namespace WebApp.ApiControllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class GroupsController: ControllerBase
 {
-    private readonly AppDbContext _ctx;
+    private readonly IAppBLL _uow;
+    private readonly GroupMapper _mapper;
 
-    public GroupsController(AppDbContext ctx)
+    public GroupsController(IAppBLL uow, IMapper autoMapper)
     {
-        _ctx = ctx;
+        _uow = uow;
+        _mapper = new GroupMapper(autoMapper);
     }
     
     [HttpGet]
@@ -29,16 +32,7 @@ public class GroupsController: ControllerBase
     {
         var userId = User.GetUserId();
 
-        return await _ctx.GroupUsers
-            .Include(gu => gu.Group)
-            .Where(gu => gu.UserId == userId)
-            .Select(gu => new Group
-            {
-                Id = gu.GroupId,
-                Name = gu.Group!.Name,
-                Type = gu.Group.GroupType,
-                IsOwner = gu.IsOwner
-            })
-            .ToListAsync();
+        var groups = await _uow.GroupService.GetAll(userId);
+        return groups.Select(g => _mapper.Map(g)!).ToList();
     }
 }

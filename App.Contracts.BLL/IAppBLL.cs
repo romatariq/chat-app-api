@@ -7,4 +7,5 @@ public interface IAppBLL: IBaseBLL
 {
     ICommentService CommentService { get; }
     IUrlService UrlService { get; }
+    IGroupService GroupService { get; }
 }

@@ -18,6 +18,7 @@ public class AppBLL : BaseBLL<IAppUOW>, IAppBLL
 
     private ICommentService? _commentService;
     private IUrlService? _urlService;
+    private IGroupService? _groupService;
     
     
     public ICommentService CommentService =>
@@ -25,4 +26,7 @@ public class AppBLL : BaseBLL<IAppUOW>, IAppBLL
     
     public IUrlService UrlService =>
         _urlService ??= new UrlService(Uow);
+    
+    public IGroupService GroupService =>
+        _groupService ??= new GroupService(Uow, _mapper);
 }

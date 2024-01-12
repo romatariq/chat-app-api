@@ -7,4 +7,5 @@ public interface IAppUOW : IBaseUOW
 {
     ICommentRepository CommentRepository { get; }
     IUrlRepository UrlRepository { get; }
+    IGroupRepository GroupRepository { get; }
 }
