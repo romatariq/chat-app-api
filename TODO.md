@@ -9,9 +9,10 @@
 
 - [ ] Fix all TODOs
 
-## Funcitonalities
+## Functionalities
 - [ ] Websocket live messages
-- [ ] Comment replys
+- [ ] Comment replays
+- [ ] User groups CRUD
 - [ ] In-app notifications
 - [ ] Email confirmation on signup (mvc?, not just link but also has to click a button)
 - [ ] External (google) login, maybe even remove own register to avoid implementing email confirmation etc.
