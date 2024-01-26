@@ -5,7 +5,7 @@
 - [X] Remove hard coded admin info (id, password)
 - [X] Add paging (verificationController getAll)
 - [X] Remove verify user controller, no reason for it
-- [ ] Add hard coded admin id for dev (so cookies wouldn't display userId that doesn't exist)
+- [X] Add hard coded admin id for dev (so cookies wouldn't display userId that doesn't exist)
 
 - [ ] Fix all TODOs
 

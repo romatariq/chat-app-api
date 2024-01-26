@@ -62,6 +62,8 @@ public static class DbInitializer
 
         admin = new AppUser
         {
+            // TODO: Remove hard-coded id - just for development
+            Id = new Guid("7c9e6679-7425-40de-944b-e07fc1f90ae7"),
             Email = adminData.email,
             UserName = adminData.userName,
             EmailConfirmed = true,
