@@ -18,6 +18,6 @@ public class ChatHub: Hub
 
     public async Task SendMessage(string url, string message)
     {
-        await Clients.Group(url).SendAsync(message);
+        await Clients.Group(url).SendAsync("ReceiveMessage", message);
     }
 }
