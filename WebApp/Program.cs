@@ -59,7 +59,7 @@ builder.Services.AddCors(options =>
     {
         policy.AllowAnyHeader();
         policy.AllowAnyMethod();
-        policy.WithOrigins("http://localhost:3000", "chrome-extension://aanmpkdkplnbekapamoimgnaajaphicj");
+        policy.SetIsOriginAllowed(o => true);
         policy.AllowCredentials();
     });
 });
