@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using WebApp;
+using WebApp.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
+builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {
@@ -118,6 +120,7 @@ app.UseCors("CorsAllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<ChatHub>("/hubs/chat");
 
 
 app.UseSwagger();
