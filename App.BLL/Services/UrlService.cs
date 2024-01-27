@@ -1,5 +1,6 @@
 using App.Contracts.BLL.IServices;
 using App.Contracts.DAL;
+using Base.Helpers;
 
 namespace App.BLL.Services;
 
@@ -12,13 +13,13 @@ public class UrlService: IUrlService
         Uow = uow;
     }
 
-    public async Task<Guid> GetOrCreateDomainId(string domain)
+    public async Task<Guid> GetOrCreateUrlId(string encodedUrl)
     {
-        return await Uow.UrlRepository.GetOrCreateDomainId(domain);
-    }
+        var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(encodedUrl);
 
-    public async Task<Guid> GetOrCreateUrlId(Guid domainId, string? path, string? parameters)
-    {
-        return await Uow.UrlRepository.GetOrCreateUrlId(domainId, path, parameters);
+        var domainId = await Uow.UrlRepository.GetOrCreateDomainId(domain);
+        var urlId = await Uow.UrlRepository.GetOrCreateUrlId(domainId, path, parameters);
+
+        return urlId;
     }
 }

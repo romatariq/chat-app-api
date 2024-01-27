@@ -86,10 +86,7 @@ public class CommentsController : ControllerBase
             });
         }
 
-        var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(url);
-
-        var domainId = await _uow.UrlService.GetOrCreateDomainId(domain);
-        var urlId = await _uow.UrlService.GetOrCreateUrlId(domainId, path, parameters);
+        var urlId = await _uow.UrlService.GetOrCreateUrlId(url);
         
         var comment = await _uow.CommentService.Add(urlId, groupId, userId, postComment.Text, User.GetUsername());
         await _uow.SaveChangesAsync();

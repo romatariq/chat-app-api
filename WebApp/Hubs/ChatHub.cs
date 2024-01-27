@@ -42,10 +42,7 @@ public class ChatHub: Hub
     
     private async Task<Guid> GetOrCreateUrlId(string url)
     {
-        var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(url);
-
-        var domainId = await _uow.UrlService.GetOrCreateDomainId(domain);
-        var urlId = await _uow.UrlService.GetOrCreateUrlId(domainId, path, parameters);
+        var urlId = await _uow.UrlService.GetOrCreateUrlId(url);
         await _uow.SaveChangesAsync();
 
         return urlId;

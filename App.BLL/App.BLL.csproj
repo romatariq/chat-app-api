@@ -12,6 +12,7 @@
       <ProjectReference Include="..\App.DTO.Common\App.DTO.Common.csproj" />
       <ProjectReference Include="..\App.Mappers\App.Mappers.csproj" />
       <ProjectReference Include="..\Base.BLL\Base.BLL.csproj" />
+      <ProjectReference Include="..\Base.Helpers\Base.Helpers.csproj" />
     </ItemGroup>
 
     <ItemGroup>
