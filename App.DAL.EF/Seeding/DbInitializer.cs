@@ -37,6 +37,7 @@ public static class DbInitializer
         await ctx.SaveChangesAsync();
         
         await DevDataInitializer.SeedDevComments(ctx);
+        await DevDataInitializer.SeedDevMessages(ctx);
         await ctx.SaveChangesAsync();
     }
 

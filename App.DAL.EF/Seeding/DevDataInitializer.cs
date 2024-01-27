@@ -70,4 +70,35 @@ internal static class DevDataInitializer
 
         await ctx.Comments.AddRangeAsync(comments);
     }
+    
+    
+    public static async Task SeedDevMessages(AppDbContext ctx)
+    {
+        if (await ctx.Messages.AnyAsync()) return;
+
+        var adminId = await ctx.Users
+            .Where(u => u.UserName!.ToLower() == "admin")
+            .Select(u => u.Id)
+            .SingleAsync();
+
+        var urlId = await ctx.Urls
+            .Include(u => u.WebDomain)
+            .Where(u => u.WebDomain!.Name == "localhost:3000" && u.Path == null)
+            .Select(u => u.Id)
+            .SingleAsync();
+
+        var messages = new List<Message>();
+        for (int i = 0; i < 20; i++)
+        {
+            messages.Add(new Message()
+            {
+                CreatedAtUtc = DateTime.UtcNow,
+                Text = "this is a demo message to localhost:3000 for development purposes.",
+                UrlId = urlId,
+                UserId = adminId
+            });
+        }
+
+        await ctx.Messages.AddRangeAsync(messages);
+    }
 }
