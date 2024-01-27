@@ -16,6 +16,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     public DbSet<GroupUser> GroupUsers { get; set; } = default!;
     public DbSet<Url> Urls { get; set; } = default!;
     public DbSet<WebDomain> WebDomains { get; set; } = default!;
+    public DbSet<Message> Messages { get; set; } = default!;
     
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
 

@@ -16,4 +16,6 @@ public class Url: DomainEntityId
     public WebDomain? WebDomain { get; set; }
 
     public ICollection<Comment>? Comments { get; set; }
+    
+    public ICollection<Message>? Messages { get; set; }
 }
