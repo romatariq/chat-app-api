@@ -10,5 +10,6 @@ public class BLLConfig: Profile
     {
         CreateMap<Dal.Comment, Bll.Comment>().ReverseMap();
         CreateMap<Dal.Group, Bll.Group>().ReverseMap();
+        CreateMap<Dal.Message, Bll.Message>().ReverseMap();
     }
 }
