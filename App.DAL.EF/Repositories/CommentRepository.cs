@@ -1,6 +1,6 @@
 using App.Contracts.DAL.IRepositories;
 using App.Domain.Enums;
-using App.DTO.Public.v1;
+using App.DTO.Common;
 using App.Helpers;
 using Base.DAL.EF;
 using Base.Helpers;

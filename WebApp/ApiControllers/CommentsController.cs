@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using App.Contracts.BLL;
+using App.DTO.Common;
 using App.DTO.Public.v1;
 using App.Mappers.AutoMappers.PublicDTO;
 using Asp.Versioning;

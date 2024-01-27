@@ -1,4 +1,4 @@
-namespace App.DTO.Public.v1;
+namespace App.DTO.Common;
 
 public enum ESort
 {

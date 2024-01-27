@@ -1,7 +1,7 @@
 using App.Contracts.BLL.IServices;
 using App.Contracts.DAL;
 using App.Contracts.DAL.IRepositories;
-using App.DTO.Public.v1;
+using App.DTO.Common;
 using AutoMappers = App.Mappers.AutoMappers;
 using Base.BLL;
 using Bll = App.DTO.Private.BLL;
