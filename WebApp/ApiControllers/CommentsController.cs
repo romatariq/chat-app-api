@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using App.Contracts.BLL;
 using App.DTO.Common;
+using App.DTO.Private.Shared;
 using App.DTO.Public.v1;
 using App.Mappers.AutoMappers.PublicDTO;
 using Asp.Versioning;
@@ -53,7 +54,7 @@ public class CommentsController : ControllerBase
         var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(url);
 
         var (comments, pageCount) = await _uow.CommentService
-                .GetAll(groupId, userId, domain, path, parameters, sort, pageNr, pageSize);
+                .GetAll(new GetAllCommentsParameters(groupId, userId, domain, path, parameters, sort, pageNr, pageSize));
 
         return new ResponseWithPaging<IEnumerable<Comment>>
         {

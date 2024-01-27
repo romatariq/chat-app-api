@@ -1,6 +1,6 @@
 using App.Contracts.DAL.IRepositories;
 using App.Domain.Enums;
-using App.DTO.Common;
+using App.DTO.Private.Shared;
 using App.Helpers;
 using Base.DAL.EF;
 using Base.Helpers;
@@ -16,7 +16,7 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
     {
     }
 
-    public async Task<(IEnumerable<Dal.Comment> comments, int totalPageCount)> GetAll(Guid groupId, Guid userId, string domain, string? path, string? parameters, ESort sort, int pageNr, int pageSize)
+    public async Task<(IEnumerable<Dal.Comment> comments, int totalPageCount)> GetAll(GetAllCommentsParameters parameters)
     {
         var commentsQuery = DbSet
             .Include(c => c.Url)
@@ -24,11 +24,11 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
             .Include(c => c.User)
             .Include(c => c.CommentReactions)
             .Where(c =>
-                c.GroupId == groupId &&
-                c.Url!.WebDomain!.Name == domain &&
-                c.Url.Path == path &&
-                c.Url.Params == parameters)
-            .SortComments(sort)
+                c.GroupId == parameters.GroupId &&
+                c.Url!.WebDomain!.Name == parameters.Domain &&
+                c.Url.Path == parameters.Path &&
+                c.Url.Params == parameters.Parameters)
+            .SortComments(parameters.Sort)
             .Select(c => new Dal.Comment
             {
                 Id = c.Id,
@@ -44,19 +44,19 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
                 HasUserLiked = c.CommentReactions!
                     .Any(cr =>
                         cr.ReactionType == ECommentReactionType.Like &&
-                        cr.UserId == userId),
+                        cr.UserId == parameters.UserId),
                 HasUserDisliked = c.CommentReactions!
                     .Any(cr =>
                         cr.ReactionType == ECommentReactionType.Dislike &&
-                        cr.UserId == userId)
+                        cr.UserId == parameters.UserId)
             })
             .AsQueryable();
 
         var comments = await commentsQuery
-            .Paging(pageNr, pageSize)
+            .Paging(parameters.PageNr, parameters.PageSize)
             .ToListAsync();
         var totalCommentsCount = await commentsQuery.CountAsync();
-        return (comments, totalCommentsCount.GetPageCount(pageSize));
+        return (comments, totalCommentsCount.GetPageCount(parameters.PageSize));
     }
 
     public async Task<Dal.Comment> Add(Guid urlId, Guid groupId, Guid userId, string text, string username)

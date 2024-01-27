@@ -1,7 +1,7 @@
 using App.Contracts.BLL.IServices;
 using App.Contracts.DAL;
 using App.Contracts.DAL.IRepositories;
-using App.DTO.Common;
+using App.DTO.Private.Shared;
 using AutoMappers = App.Mappers.AutoMappers;
 using Base.BLL;
 using Bll = App.DTO.Private.BLL;
@@ -17,10 +17,9 @@ public class CommentService: BaseService<Dal.Comment, Bll.Comment, ICommentRepos
     {
     }
 
-    public async Task<(IEnumerable<Bll.Comment> comments, int totalPageCount)> GetAll(Guid groupId, Guid userId, string domain, string? path, string? parameters, ESort sort, int pageNr,
-        int pageSize)
+    public async Task<(IEnumerable<Bll.Comment> comments, int totalPageCount)> GetAll(GetAllCommentsParameters parameters)
     {
-        var (comments, pageCount) = await Repository.GetAll(groupId, userId, domain, path, parameters, sort, pageNr, pageSize);
+        var (comments, pageCount) = await Repository.GetAll(parameters);
         var bllComments = comments.Select(Mapper.Map);
         return (bllComments, pageCount)!;
     }
