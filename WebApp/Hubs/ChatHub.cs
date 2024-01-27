@@ -1,3 +1,5 @@
+using App.Contracts.BLL;
+using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
@@ -6,18 +8,46 @@ namespace WebApp.Hubs;
 [Authorize]
 public class ChatHub: Hub
 {
-    public async Task JoinChat(string url)
+    private readonly IAppBLL _uow;
+
+    public ChatHub(IAppBLL uow)
     {
-        await Groups.AddToGroupAsync(Context.ConnectionId, url);
+        _uow = uow;
     }
     
-    public Task LeaveChat(string url)
+    public async Task JoinChat(string url)
     {
-        return Groups.RemoveFromGroupAsync(Context.ConnectionId, url);
+        var urlId = await GetOrCreateUrlId(url);
+        var messages = await _uow.MessageService.GetPreviousMessages(urlId);
+
+        await Groups.AddToGroupAsync(Context.ConnectionId, urlId.ToString());
+        await Clients.Caller.SendAsync("ReceiveGroupId", urlId);
+        await Clients.Caller.SendAsync("ReceiveMessages", messages);
+    }
+    
+    public Task LeaveChat(Guid urlId)
+    {
+        return Groups.RemoveFromGroupAsync(Context.ConnectionId, urlId.ToString());
     }
 
-    public async Task SendMessage(string url, string message)
+    public async Task SendMessage(Guid urlId, string message)
     {
-        await Clients.Group(url).SendAsync("ReceiveMessage", message);
+        var userId = Context.User!.GetUserId();
+        var username = Context.User!.GetUsername();
+        var addedMessage = await _uow.MessageService.Add(message, urlId, userId, username);
+        await _uow.SaveChangesAsync();
+        
+        await Clients.Group(urlId.ToString()).SendAsync("ReceiveMessage", addedMessage);
+    }
+    
+    private async Task<Guid> GetOrCreateUrlId(string url)
+    {
+        var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(url);
+
+        var domainId = await _uow.UrlService.GetOrCreateDomainId(domain);
+        var urlId = await _uow.UrlService.GetOrCreateUrlId(domainId, path, parameters);
+        await _uow.SaveChangesAsync();
+
+        return urlId;
     }
 }
