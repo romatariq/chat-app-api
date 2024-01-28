@@ -40,7 +40,7 @@ builder.Services.AddAuthentication();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.ExpireTimeSpan = TimeSpan.FromHours(3);
+    options.ExpireTimeSpan = TimeSpan.FromDays(7);
     options.SlidingExpiration = true;
     options.Cookie.Name = "auth";
     options.Cookie.SameSite = SameSiteMode.None;
