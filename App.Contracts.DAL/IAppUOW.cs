@@ -9,4 +9,5 @@ public interface IAppUOW : IBaseUOW
     IUrlRepository UrlRepository { get; }
     IGroupRepository GroupRepository { get; }
     IMessageRepository MessageRepository { get; }
+    ICommentReactionRepository CommentReactionRepository { get; }
 }

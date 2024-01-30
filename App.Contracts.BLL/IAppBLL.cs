@@ -9,4 +9,5 @@ public interface IAppBLL: IBaseBLL
     IUrlService UrlService { get; }
     IGroupService GroupService { get; }
     IMessageService MessageService { get; }
+    ICommentReactionService CommentReactionService { get; }
 }
