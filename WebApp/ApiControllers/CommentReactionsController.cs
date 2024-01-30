@@ -33,6 +33,8 @@ public class CommentReactionsController: ControllerBase
         reaction.UserId = User.GetUserId();
         
         var addedReaction = await _uow.CommentReactionService.Add(_mapper.Map(reaction)!);
+        
+        await _uow.SaveChangesAsync();
 
         return  _mapper.Map(addedReaction)!;
     }
@@ -46,6 +48,8 @@ public class CommentReactionsController: ControllerBase
         reaction.UserId = User.GetUserId();
 
         var updatedReaction = await _uow.CommentReactionService.Update(_mapper.Map(reaction)!);
+        
+        await _uow.SaveChangesAsync();
 
         return _mapper.Map(updatedReaction)!;
     }
@@ -57,6 +61,9 @@ public class CommentReactionsController: ControllerBase
     public async Task<ActionResult> Delete([FromQuery] Guid commentId)
     {
         await _uow.CommentReactionService.Delete(commentId, User.GetUserId());
+        
+        await _uow.SaveChangesAsync();
+        
         return Ok();
     }
 }
