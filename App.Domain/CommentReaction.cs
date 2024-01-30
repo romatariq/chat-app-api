@@ -11,7 +11,7 @@ public class CommentReaction: DomainEntityId
     public ECommentReactionType ReactionType { get; set; }
 
 
-    public Guid CommendId { get; set; }
+    public Guid CommentId { get; set; }
     public Comment? Comment { get; set; }
 
     public Guid UserId { get; set; }
