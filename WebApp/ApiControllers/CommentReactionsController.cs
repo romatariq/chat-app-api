@@ -7,6 +7,7 @@ using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PublicV1 = App.DTO.Public.v1;
+using Bll = App.DTO.Private.BLL;
 
 namespace WebApp.ApiControllers;
 
@@ -30,9 +31,14 @@ public class CommentReactionsController: ControllerBase
     [ProducesResponseType(typeof(PublicV1.CommentReaction), StatusCodes.Status201Created)]
     public async Task<ActionResult<PublicV1.CommentReaction>> Add([FromBody] PublicV1.CommentReaction reaction)
     {
-        reaction.UserId = User.GetUserId();
+        var bllReaction = new Bll.CommentReaction()
+        {
+            UserId = User.GetUserId(),
+            CommentId = reaction.CommentId,
+            ReactionType = reaction.ReactionType
+        };
         
-        var addedReaction = await _uow.CommentReactionService.Add(_mapper.Map(reaction)!);
+        var addedReaction = await _uow.CommentReactionService.Add(bllReaction);
         
         await _uow.SaveChangesAsync();
 
@@ -45,9 +51,14 @@ public class CommentReactionsController: ControllerBase
     [ProducesResponseType(typeof(PublicV1.CommentReaction), StatusCodes.Status200OK)]
     public async Task<ActionResult<PublicV1.CommentReaction>> Update([FromBody] PublicV1.CommentReaction reaction)
     {
-        reaction.UserId = User.GetUserId();
+        var bllReaction = new Bll.CommentReaction()
+        {
+            UserId = User.GetUserId(),
+            CommentId = reaction.CommentId,
+            ReactionType = reaction.ReactionType
+        };
 
-        var updatedReaction = await _uow.CommentReactionService.Update(_mapper.Map(reaction)!);
+        var updatedReaction = await _uow.CommentReactionService.Update(bllReaction);
         
         await _uow.SaveChangesAsync();
 
