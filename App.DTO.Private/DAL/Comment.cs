@@ -1,11 +1,9 @@
-using Base.Contracts.Domain;
+using Base.Domain;
 
 namespace App.DTO.Private.DAL;
 
-public class Comment : IDomainEntityId
+public class Comment : DomainEntityId
 {
-    public Guid Id { get; set; }
-    
     public string Text { get; set; } = default!;
 
     public DateTime CreatedAtUtc { get; set; }
