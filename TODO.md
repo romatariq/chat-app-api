@@ -11,11 +11,17 @@
 
 ## Functionalities
 - [ ] Websocket live messages
-- [ ] Comment replays
-- [ ] User groups CRUD
-- [ ] In-app notifications
+- [ ] Comment replays - comment can have many replies, each reply can have several replies. But all replies are on single level, they don't create a tree. Meaning reply has parentCommentId and replyToCommentId (which can be null if matches parentCommentId)
+- [ ] In-app notifications (if someone has replied to you or liked post)
+- [ ] Reports page: show simple report form and stats (report count 24hrs, last hour, can make a graph in future)
+
+### Nice to have
+- [ ] User groups CRUD (group chats and domain/email group, how to create them and invite people)
+- [ ] Let user like his own comments
 - [ ] Email confirmation on signup (mvc?, not just link but also has to click a button)
 - [ ] External (google) login, maybe even remove own register to avoid implementing email confirmation etc.
+
+### In far future
 - [ ] Limit requests
 - [ ] Paid user (higher request limit, premium emotes?, etc)
 - [ ] Emotes
