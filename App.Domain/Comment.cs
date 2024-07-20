@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using App.Domain.Identity;
 using Base.Domain;
 
@@ -12,14 +13,29 @@ public class Comment: DomainEntityId
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 
 
-    public Guid UrlId { get; set; }
-    public Url? Url { get; set; }
-
     public Guid UserId { get; set; }
     public AppUser? User { get; set; }
 
-    public Guid GroupId { get; set; }
+
+    // if parent comment - must have GroupId and UrlId
+    public Guid? GroupId { get; set; }
     public Group? Group { get; set; }
 
+    public Guid? UrlId { get; set; }
+    public Url? Url { get; set; }
+
+    // if reply - must have ParentCommentId
+    public Guid? ParentCommentId { get; set; }
+    public Comment? ParentComment { get; set; }
+
+    public Guid? ReplyToCommentId { get; set; }
+    public Comment? ReplyToComment { get; set; }
+
     public ICollection<CommentReaction>? CommentReactions { get; set; }
+
+    [InverseProperty(nameof(ParentComment))]
+    public ICollection<Comment>? CommentReplies { get; set; }
+
+    [InverseProperty(nameof(ReplyToComment))]
+    public ICollection<Comment>? ReplyReplies { get; set; }
 }

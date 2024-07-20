@@ -19,4 +19,8 @@ public class Comment : IDomainEntityId
     public bool HasUserLiked { get; set; }
  
     public bool HasUserDisliked { get; set; }
+
+    public int RepliesCount { get; set; }
+
+    public string? ReplyToUsername { get; set; }
 }

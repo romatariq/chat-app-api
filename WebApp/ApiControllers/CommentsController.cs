@@ -17,7 +17,7 @@ namespace WebApp.ApiControllers;
 [ApiController]
 [Authorize]
 [ApiVersion("1.0")]
-[Route("api/v{version:apiVersion}/[controller]/url/{url}/group/{groupId:guid}")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class CommentsController : ControllerBase
 {
     private readonly IAppBLL _uow;
@@ -34,8 +34,8 @@ public class CommentsController : ControllerBase
     [ProducesResponseType(typeof(ResponseWithPaging<IEnumerable<Comment>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ResponseWithPaging<IEnumerable<Comment>>>> GetAll(
-        [FromRoute] string url,
-        [FromRoute] Guid groupId,
+        [FromQuery] string url,
+        [FromQuery] Guid groupId,
         [FromQuery] [Range(1, int.MaxValue)] int pageNr = 1,
         [FromQuery] [Range(1, 100)] int pageSize = 25,
         [FromQuery]  ESort sort = ESort.Top)
@@ -65,19 +65,38 @@ public class CommentsController : ControllerBase
         };
     }
 
+    [HttpGet]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(ResponseWithPaging<IEnumerable<Comment>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ResponseWithPaging<IEnumerable<Comment>>>> GetAllReplies(
+        [FromQuery] Guid parentCommentId,
+        [FromQuery][Range(1, int.MaxValue)] int pageNr = 1,
+        [FromQuery][Range(1, 100)] int pageSize = 25)
+    {
+        var userId = User.GetUserId();
+
+        var (comments, pageCount) = await _uow.CommentService.GetAllReplies(parentCommentId, userId, pageSize, pageNr);
+
+        return new ResponseWithPaging<IEnumerable<Comment>>
+        {
+            Data = comments.Select(_commentMapper.Map)!,
+            PageNr = pageNr,
+            PageSize = pageSize,
+            PageCount = pageCount
+        };
+    }
+
 
     [HttpPost]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(Comment), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<Comment>> Add(
-        [FromRoute] string url,
-        [FromRoute] Guid groupId,
-        [FromBody] PostComment postComment)
+    public async Task<ActionResult<Comment>> Add([FromBody] PostComment postComment)
     {
         var userId = User.GetUserId();
 
-        var userInGroup = await _uow.GroupService.IsUserInGroup(userId, groupId);
+        var userInGroup = await _uow.GroupService.IsUserInGroup(userId, postComment.GroupId);
         if (!userInGroup)
         {
             return BadRequest(new ErrorResponse
@@ -86,9 +105,24 @@ public class CommentsController : ControllerBase
             });
         }
 
-        var urlId = await _uow.UrlService.GetOrCreateUrlId(url);
+        var urlId = await _uow.UrlService.GetOrCreateUrlId(postComment.Url);
         
-        var comment = await _uow.CommentService.Add(urlId, groupId, userId, postComment.Text, User.GetUsername());
+        var comment = await _uow.CommentService.Add(urlId, postComment.GroupId, userId, postComment.Text, User.GetUsername());
+        await _uow.SaveChangesAsync();
+
+        return _commentMapper.Map(comment)!;
+    }
+
+    
+    [HttpPost]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(Comment), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<Comment>> AddReply([FromBody] PostReply postComment)
+    {
+        var userId = User.GetUserId();
+
+        var comment = await _uow.CommentService.AddReply(postComment.ParentCommentId, postComment.ReplyToCommentId, userId, postComment.Text, User.GetUsername());
         await _uow.SaveChangesAsync();
 
         return _commentMapper.Map(comment)!;

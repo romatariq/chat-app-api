@@ -24,9 +24,22 @@ public class CommentService: BaseService<Dal.Comment, Bll.Comment, ICommentRepos
         return (bllComments, pageCount)!;
     }
 
+    public async Task<(IEnumerable<Bll.Comment> comments, int totalPageCount)> GetAllReplies(Guid parentCommentId, Guid userId, int pageSize, int pageNr)
+    {
+        var (comments, pageCount) = await Repository.GetAllReplies(parentCommentId, userId, pageSize, pageNr);
+        var bllComments = comments.Select(Mapper.Map);
+        return (bllComments, pageCount)!;
+    }
+
     public async Task<Bll.Comment> Add(Guid urlId, Guid groupId, Guid userId, string text, string username)
     {
         var comment = await Repository.Add(urlId, groupId, userId, text, username);
+        return Mapper.Map(comment)!;
+    }
+
+    public async Task<Bll.Comment> AddReply(Guid parentCommentId, Guid replyToCommentId, Guid userId, string text, string username)
+    {
+        var comment = await Repository.Add(parentCommentId, replyToCommentId, userId, text, username);
         return Mapper.Map(comment)!;
     }
 }

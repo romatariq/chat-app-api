@@ -17,4 +17,9 @@ public class Comment : DomainEntityId
     public bool HasUserLiked { get; set; }
  
     public bool HasUserDisliked { get; set; }
+
+    public int RepliesCount { get; set; }
+
+    // values are null if it's parent comment
+    public string? ReplyToUsername { get; set; }
 }
