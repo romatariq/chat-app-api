@@ -17,7 +17,6 @@
 
 ### Nice to have
 - [ ] User groups CRUD (group chats and domain/email group, how to create them and invite people)
-- [ ] Let user like his own comments
 - [ ] Email confirmation on signup (mvc?, not just link but also has to click a button)
 - [ ] External (google) login, maybe even remove own register to avoid implementing email confirmation etc.
 

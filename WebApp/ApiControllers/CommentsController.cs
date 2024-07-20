@@ -65,7 +65,7 @@ public class CommentsController : ControllerBase
         };
     }
 
-    [HttpGet]
+    [HttpGet("/replies")]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(ResponseWithPaging<IEnumerable<Comment>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
@@ -114,7 +114,7 @@ public class CommentsController : ControllerBase
     }
 
     
-    [HttpPost]
+    [HttpPost("/replies")]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(Comment), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
