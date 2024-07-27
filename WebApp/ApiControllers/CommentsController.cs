@@ -65,7 +65,7 @@ public class CommentsController : ControllerBase
         };
     }
 
-    [HttpGet("/replies")]
+    [HttpGet("replies")]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(ResponseWithPaging<IEnumerable<Comment>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
@@ -107,14 +107,15 @@ public class CommentsController : ControllerBase
 
         var urlId = await _uow.UrlService.GetOrCreateUrlId(postComment.Url);
         
-        var comment = await _uow.CommentService.Add(urlId, postComment.GroupId, userId, postComment.Text, User.GetUsername());
+        var comment = await _uow.CommentService.Add(urlId, postComment.GroupId, userId, postComment.Text);
         await _uow.SaveChangesAsync();
+        comment.Username = User.GetUsername();
 
         return _commentMapper.Map(comment)!;
     }
 
     
-    [HttpPost("/replies")]
+    [HttpPost("replies")]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(Comment), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
@@ -122,8 +123,9 @@ public class CommentsController : ControllerBase
     {
         var userId = User.GetUserId();
 
-        var comment = await _uow.CommentService.AddReply(postComment.ParentCommentId, postComment.ReplyToCommentId, userId, postComment.Text, User.GetUsername());
+        var comment = await _uow.CommentService.AddReply(postComment.ParentCommentId, postComment.ReplyToCommentId, userId, postComment.Text);
         await _uow.SaveChangesAsync();
+        comment.Username = User.GetUsername();
 
         return _commentMapper.Map(comment)!;
     }

@@ -102,17 +102,17 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
         return (comments, totalCommentsCount.GetPageCount(pageSize));
     }
 
-    public async Task<Dal.Comment> Add(Guid urlId, Guid groupId, Guid userId, string text, string username)
+    public async Task<Dal.Comment> Add(Guid urlId, Guid groupId, Guid userId, string text)
     {
-        return await Add(urlId, groupId, null, null, userId, text, username);
+        return await Add(urlId, groupId, null, null, userId, text);
     }
 
-    public async Task<Dal.Comment> AddReply(Guid parentCommentId, Guid replyToCommentId, Guid userId, string text, string username)
+    public async Task<Dal.Comment> AddReply(Guid parentCommentId, Guid replyToCommentId, Guid userId, string text)
     {
-        return await Add(null, null, parentCommentId, replyToCommentId, userId, text, username);
+        return await Add(null, null, parentCommentId, replyToCommentId, userId, text);
     }
 
-    private async Task<Dal.Comment> Add(Guid? urlId, Guid? groupId, Guid? parentCommentId, Guid? replyToCommentId, Guid userId, string text, string username)
+    private async Task<Dal.Comment> Add(Guid? urlId, Guid? groupId, Guid? parentCommentId, Guid? replyToCommentId, Guid userId, string text)
     {
         var comment = new Domain.Comment
         {
@@ -124,10 +124,10 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
             ReplyToCommentId = replyToCommentId
         };
         await DbSet.AddAsync(comment);
-        var replyToUsername = await DbSet
-            .Include(c => c.ReplyToComment!.User)
-            .Where(c => c.Id == comment.Id)
-            .Select(c => c.ReplyToComment!.User!.UserName)
+        var replyToUsername = replyToCommentId == null ? null : await DbSet
+            .Include(c => c.User)
+            .Where(c => c.Id == comment.ReplyToCommentId)
+            .Select(c => c.User!.UserName)
             .FirstOrDefaultAsync();
 
         return new Dal.Comment
@@ -135,7 +135,6 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
             Id = comment.Id,
             CreatedAtUtc = comment.CreatedAtUtc,
             Text = comment.Text,
-            Username = username,
             ReplyToUsername = replyToUsername
         };
     }

@@ -31,15 +31,15 @@ public class CommentService: BaseService<Dal.Comment, Bll.Comment, ICommentRepos
         return (bllComments, pageCount)!;
     }
 
-    public async Task<Bll.Comment> Add(Guid urlId, Guid groupId, Guid userId, string text, string username)
+    public async Task<Bll.Comment> Add(Guid urlId, Guid groupId, Guid userId, string text)
     {
-        var comment = await Repository.Add(urlId, groupId, userId, text, username);
+        var comment = await Repository.Add(urlId, groupId, userId, text);
         return Mapper.Map(comment)!;
     }
 
-    public async Task<Bll.Comment> AddReply(Guid parentCommentId, Guid replyToCommentId, Guid userId, string text, string username)
+    public async Task<Bll.Comment> AddReply(Guid parentCommentId, Guid replyToCommentId, Guid userId, string text)
     {
-        var comment = await Repository.Add(parentCommentId, replyToCommentId, userId, text, username);
+        var comment = await Repository.AddReply(parentCommentId, replyToCommentId, userId, text);
         return Mapper.Map(comment)!;
     }
 }
