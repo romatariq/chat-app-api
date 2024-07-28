@@ -52,7 +52,9 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
                     .Any(cr =>
                         cr.ReactionType == ECommentReactionType.Dislike &&
                         cr.UserId == parameters.UserId),
-                RepliesCount = c.CommentReplies!.Count
+                RepliesCount = c.CommentReplies!.Count,
+                ReplyToCommentId = c.ReplyToCommentId,
+                ParentCommentId = c.ParentCommentId
             })
             .AsQueryable();
 
@@ -63,14 +65,14 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
         return (comments, totalCommentsCount.GetPageCount(parameters.PageSize));
     }
 
-    public async Task<(IEnumerable<Dal.Comment> comments, int totalPageCount)> GetAllReplies(Guid parentCommentId, Guid userId, int pageSize, int pageNr)
+    public async Task<(IEnumerable<Dal.Comment> comments, int totalPageCount)> GetAllReplies(Guid parentCommentId, Guid userId, ESort sort, int pageSize, int pageNr)
     {
         var commentsQuery = DbSet
             .Include(c => c.User)
             .Include(c => c.CommentReactions)
             .Include(c => c.ReplyToComment!.User)
             .Where(c => c.ParentCommentId == parentCommentId)
-            .SortComments(ESort.Old)
+            .SortComments(sort)
             .Select(c => new Dal.Comment
             {
                 Id = c.Id,
@@ -91,7 +93,9 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
                     .Any(cr =>
                         cr.ReactionType == ECommentReactionType.Dislike &&
                         cr.UserId == userId),
-                ReplyToUsername = c.ReplyToComment!.User!.UserName
+                ReplyToUsername = c.ReplyToComment!.User!.UserName,
+                ReplyToCommentId = c.ReplyToCommentId,
+                ParentCommentId = c.ParentCommentId
             })
             .AsQueryable();
 
@@ -135,7 +139,9 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
             Id = comment.Id,
             CreatedAtUtc = comment.CreatedAtUtc,
             Text = comment.Text,
-            ReplyToUsername = replyToUsername
+            ReplyToUsername = replyToUsername,
+            ReplyToCommentId = replyToCommentId,
+            ParentCommentId = parentCommentId
         };
     }
 }

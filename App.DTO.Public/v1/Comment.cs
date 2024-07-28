@@ -24,4 +24,6 @@ public class Comment
     public int RepliesCount { get; set; }
 
     public string? ReplyToUsername { get; set; }
+    public Guid? ReplyToCommentId { get; set; }
+    public Guid? ParentCommentId { get; set; }
 }

@@ -22,4 +22,6 @@ public class Comment : DomainEntityId
 
     // values are null if it's parent comment
     public string? ReplyToUsername { get; set; }
+    public Guid? ReplyToCommentId { get; set; }
+    public Guid? ParentCommentId { get; set; }
 }

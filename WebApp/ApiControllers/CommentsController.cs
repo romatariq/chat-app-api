@@ -72,11 +72,12 @@ public class CommentsController : ControllerBase
     public async Task<ActionResult<ResponseWithPaging<IEnumerable<Comment>>>> GetAllReplies(
         [FromQuery] Guid parentCommentId,
         [FromQuery][Range(1, int.MaxValue)] int pageNr = 1,
-        [FromQuery][Range(1, 100)] int pageSize = 25)
+        [FromQuery][Range(1, 100)] int pageSize = 10,
+        [FromQuery] ESort sort = ESort.Old)
     {
         var userId = User.GetUserId();
 
-        var (comments, pageCount) = await _uow.CommentService.GetAllReplies(parentCommentId, userId, pageSize, pageNr);
+        var (comments, pageCount) = await _uow.CommentService.GetAllReplies(parentCommentId, userId, sort, pageSize, pageNr);
 
         return new ResponseWithPaging<IEnumerable<Comment>>
         {
