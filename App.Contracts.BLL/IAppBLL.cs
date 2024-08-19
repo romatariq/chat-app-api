@@ -10,4 +10,5 @@ public interface IAppBLL: IBaseBLL
     IGroupService GroupService { get; }
     IMessageService MessageService { get; }
     ICommentReactionService CommentReactionService { get; }
+    IDomainReportService DomainReportService { get; }
 }

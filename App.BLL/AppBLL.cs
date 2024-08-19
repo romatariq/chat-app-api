@@ -21,6 +21,7 @@ public class AppBLL : BaseBLL<IAppUOW>, IAppBLL
     private IGroupService? _groupService;
     private IMessageService? _messageService;
     private ICommentReactionService? _commentReactionService;
+    private IDomainReportService? _domainReportService;
     
     
     public ICommentService CommentService =>
@@ -37,4 +38,7 @@ public class AppBLL : BaseBLL<IAppUOW>, IAppBLL
 
     public ICommentReactionService CommentReactionService =>
         _commentReactionService ??= new CommentReactionService(Uow, _mapper);
+
+    public IDomainReportService DomainReportService =>
+        _domainReportService ??= new DomainDomainReportService(Uow);
 }

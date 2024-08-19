@@ -10,4 +10,5 @@ public interface IAppUOW : IBaseUOW
     IGroupRepository GroupRepository { get; }
     IMessageRepository MessageRepository { get; }
     ICommentReactionRepository CommentReactionRepository { get; }
+    IDomainReportRepository DomainReportRepository { get; }
 }

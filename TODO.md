@@ -6,12 +6,12 @@
 - [X] Add paging (verificationController getAll)
 - [X] Remove verify user controller, no reason for it
 - [X] Add hard coded admin id for dev (so cookies wouldn't display userId that doesn't exist)
+- [X] Websocket live messages
+- [X] Comment replays - comment can have many replies, each reply can have several replies. But all replies are on single level, they don't create a tree. Meaning reply has parentCommentId and replyToCommentId (which can be null if matches parentCommentId)
 
 - [ ] Fix all TODOs
 
 ## Functionalities
-- [ ] Websocket live messages
-- [ ] Comment replays - comment can have many replies, each reply can have several replies. But all replies are on single level, they don't create a tree. Meaning reply has parentCommentId and replyToCommentId (which can be null if matches parentCommentId)
 - [ ] In-app notifications (if someone has replied to you or liked post)
 - [ ] Reports page: show simple report form and stats (report count 24hrs, last hour, can make a graph in future)
 

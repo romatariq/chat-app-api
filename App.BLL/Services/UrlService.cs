@@ -22,4 +22,9 @@ public class UrlService: IUrlService
 
         return urlId;
     }
+
+    public async Task<Guid> GetOrCreateDomainId(string domain)
+    {
+        return await Uow.UrlRepository.GetOrCreateDomainId(domain);
+    }
 }

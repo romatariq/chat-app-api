@@ -1,6 +1,4 @@
 using App.Contracts.DAL.IRepositories;
-using Base.Contracts.DAL;
-using Bll = App.DTO.Private.BLL;
 
 namespace App.Contracts.BLL.IServices;
 

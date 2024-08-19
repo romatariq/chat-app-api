@@ -17,6 +17,7 @@ public class AppUOW : EfBaseUOW<AppDbContext>, IAppUOW
     private IGroupRepository? _groupRepository;
     private IMessageRepository? _messageRepository;
     private ICommentReactionRepository? _commentReactionRepository;
+    private IDomainReportRepository? _domainReportRepository;
     
  
     public ICommentRepository CommentRepository =>
@@ -33,4 +34,7 @@ public class AppUOW : EfBaseUOW<AppDbContext>, IAppUOW
 
     public ICommentReactionRepository CommentReactionRepository =>
         _commentReactionRepository ??= new CommentReactionRepository(DbContext);
+
+    public IDomainReportRepository DomainReportRepository =>
+        _domainReportRepository ??= new DomainReportRepository(DbContext);
 }
