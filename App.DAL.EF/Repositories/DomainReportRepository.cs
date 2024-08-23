@@ -16,8 +16,9 @@ public class DomainReportRepository: EfBaseRepository<Domain.DomainReport, AppDb
 
     public async Task<IEnumerable<DomainReport>> GetReports(string domain, EDomainReportTimeframe timeFrame)
     {
+        var minimumDateTime = DomainReportQueryHelpers.GetMinimumDateTimeForQuery(timeFrame);
         var result = await DbSet.Include(x => x.WebDomain)
-            .Where(x => x.WebDomain!.Name == domain)
+            .Where(x => x.WebDomain!.Name == domain && x.CreatedAtUtc > minimumDateTime)
             .GroupReports(timeFrame)
             .Select(g => new DomainReport
             {
