@@ -37,15 +37,16 @@ public class DomainReportController: ControllerBase
         };
     }
 
-    [HttpPost]
+    [HttpPost("{url}")]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status201Created)]
-    public async Task<ActionResult> Add([FromQuery] string url)
+    public async Task<ActionResult> Add([FromRoute] string url)
     {
+        var domainId = await _uow.UrlService.GetOrCreateDomainId(UrlHelpers.ParseEncodedUrl(url).domain);
         var userId = User.GetUserId();
-        var domainId = await _uow.UrlService.GetOrCreateDomainId(url);
 
         await _uow.DomainReportService.AddReport(domainId, userId);
+        await _uow.SaveChangesAsync();
 
         return Ok();
     }

@@ -19,33 +19,45 @@ public static class DomainReportQueryHelpers
     
     private static IQueryable<IGrouping<int, DomainReport>> GetDayReports(this IQueryable<DomainReport> query)
     {
-        var minimumDate = DateTime.UtcNow.AddDays(-1);
+        var utcNow = DateTime.UtcNow;
+        var minimumDate = utcNow.AddDays(-1).AddMinutes(60 - utcNow.Minute);
+        minimumDate = new DateTime(minimumDate.Year, minimumDate.Month, minimumDate.Day, minimumDate.Hour, 0, 0, DateTimeKind.Utc);
+        
         return query
-            .Where(x => x.CreatedAtUtc > minimumDate && x.CreatedAtUtc.Hour != minimumDate.Hour)
+            .Where(x => x.CreatedAtUtc > minimumDate)
             .GroupBy(x => x.CreatedAtUtc.Hour);
     }
 
     private static IQueryable<IGrouping<int, DomainReport>> GetWeekReports(this IQueryable<DomainReport> query)
     {
-        var minimumDate = DateTime.UtcNow.AddDays(-7);
+        var utcNow = DateTime.UtcNow;
+        var minimumDate = utcNow.AddDays(-7).AddHours(24 - utcNow.Hour);
+        minimumDate = new DateTime(minimumDate.Year, minimumDate.Month, minimumDate.Day, 0, 0, 0, DateTimeKind.Utc);
+        
         return query
-            .Where(x => x.CreatedAtUtc > minimumDate && x.CreatedAtUtc.DayOfWeek != minimumDate.DayOfWeek)
-            .GroupBy(x => x.CreatedAtUtc.Day);
+            .Where(x => x.CreatedAtUtc > minimumDate)
+            .GroupBy(x => x.CreatedAtUtc.DayOfYear);
     }
 
     private static IQueryable<IGrouping<int, DomainReport>> GetMonthReports(this IQueryable<DomainReport> query)
     {
-        var minimumDate = DateTime.UtcNow.AddMonths(-1);
+        var utcNow = DateTime.UtcNow;
+        var minimumDate = utcNow.AddMonths(-1).AddHours(24 - utcNow.Hour);
+        minimumDate = new DateTime(minimumDate.Year, minimumDate.Month, minimumDate.Day, 0, 0, 0, DateTimeKind.Utc);
+
         return query
-            .Where(x => x.CreatedAtUtc > minimumDate && x.CreatedAtUtc.Day != minimumDate.Day)
-            .GroupBy(x => x.CreatedAtUtc.Day);
+            .Where(x => x.CreatedAtUtc > minimumDate)
+            .GroupBy(x => x.CreatedAtUtc.DayOfYear);
     }
 
     private static IQueryable<IGrouping<int, DomainReport>> GetYearReports(this IQueryable<DomainReport> query)
     {
-        var minimumDate = DateTime.UtcNow.AddYears(-1);
+        var utcNow = DateTime.UtcNow;
+        var minimumDate = utcNow.AddYears(-1).AddMonths(1);
+        minimumDate = new DateTime(minimumDate.Year, minimumDate.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+
         return query
-            .Where(x => x.CreatedAtUtc > minimumDate && x.CreatedAtUtc.Month != minimumDate.Month)
+            .Where(x => x.CreatedAtUtc > minimumDate)
             .GroupBy(x => x.CreatedAtUtc.Month);
     }
 }
