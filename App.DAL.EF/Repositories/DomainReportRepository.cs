@@ -32,13 +32,6 @@ public class DomainReportRepository: EfBaseRepository<Domain.DomainReport, AppDb
 
     public async Task AddReport(Guid domainId, Guid userId, EReportType reportType = EReportType.ConnectionIssue)
     {
-        var now = DateTime.UtcNow.AddHours(-1);
-        var reportExists = await DbSet.AnyAsync(x => x.UserId == userId && x.ReportType == reportType && x.WebDomainId == domainId && x.CreatedAtUtc > now);
-        if (reportExists)
-        {
-            throw new Exception("User has already reported this domain in the last hour.");
-        }
-
         var report = new Domain.DomainReport
         {
             ReportType = reportType,
@@ -46,5 +39,11 @@ public class DomainReportRepository: EfBaseRepository<Domain.DomainReport, AppDb
             UserId = userId
         };
         await DbSet.AddAsync(report);
+    }
+
+    public async Task<bool> CanReport(Guid domainId, Guid userId, EReportType reportType = EReportType.ConnectionIssue)
+    {
+        var earliestValidDate = DateTime.UtcNow.AddHours(-1);
+        return !await DbSet.AnyAsync(x => x.UserId == userId && x.ReportType == reportType && x.WebDomainId == domainId && x.CreatedAtUtc > earliestValidDate);
     }
 }

@@ -3,6 +3,7 @@ using App.Contracts.DAL;
 using App.Domain.Enums;
 using App.DTO.Common;
 using App.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.BLL.Services;
 
@@ -50,6 +51,17 @@ public class DomainDomainReportService : IDomainReportService
 
     public async Task AddReport(Guid domainId, Guid userId, EReportType reportType = EReportType.ConnectionIssue)
     {
+        var canReport = await Uow.DomainReportRepository.CanReport(domainId, userId, reportType);
+        if (!canReport)
+        {
+            throw new Exception("User already has an active report for this domain.");
+        }
+
         await Uow.DomainReportRepository.AddReport(domainId, userId, reportType);
+    }
+
+    public async Task<bool> CanReport(Guid domainId, Guid userId, EReportType reportType = EReportType.ConnectionIssue)
+    {
+        return await Uow.DomainReportRepository.CanReport(domainId, userId, reportType);
     }
 }

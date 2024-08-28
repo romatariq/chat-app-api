@@ -50,4 +50,15 @@ public class DomainReportController: ControllerBase
 
         return Ok();
     }
+
+    [HttpGet("[action]")]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    public async Task<ActionResult<bool>> CanReport([FromQuery] string url)
+    {
+        var domainId = await _uow.UrlService.GetOrCreateDomainId(UrlHelpers.ParseEncodedUrl(url).domain);
+        var userId = User.GetUserId();
+
+        return await _uow.DomainReportService.CanReport(domainId, userId);
+    }
 }
