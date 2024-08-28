@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace WebApp.Hubs;
 
-[Authorize]
 public class ChatHub: Hub
 {
     private readonly IAppBLL _uow;
@@ -30,6 +29,7 @@ public class ChatHub: Hub
         return Groups.RemoveFromGroupAsync(Context.ConnectionId, urlId.ToString());
     }
 
+    [Authorize]
     public async Task SendMessage(Guid urlId, string message)
     {
         var userId = Context.User!.GetUserId();

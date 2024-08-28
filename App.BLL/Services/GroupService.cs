@@ -17,7 +17,7 @@ public class GroupService: BaseService<Dal.Group, Bll.Group, IGroupRepository>, 
     {
     }
 
-    public async Task<IEnumerable<Bll.Group>> GetAll(Guid userId)
+    public async Task<IEnumerable<Bll.Group>> GetAll(Guid? userId)
     {
         var groups = await Repository.GetAll(userId);
         return groups.Select(Mapper.Map)!;

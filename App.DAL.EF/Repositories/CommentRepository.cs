@@ -44,14 +44,14 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
                 Dislikes = c.CommentReactions!
                     .Count(cr =>
                         cr.ReactionType == ECommentReactionType.Dislike),
-                HasUserLiked = c.CommentReactions!
+                HasUserLiked = parameters.UserId != null && c.CommentReactions!
                     .Any(cr =>
-                        cr.ReactionType == ECommentReactionType.Like &&
-                        cr.UserId == parameters.UserId),
-                HasUserDisliked = c.CommentReactions!
+                        cr.UserId == parameters.UserId &&
+                        cr.ReactionType == ECommentReactionType.Like),
+                HasUserDisliked = parameters.UserId != null && c.CommentReactions!
                     .Any(cr =>
-                        cr.ReactionType == ECommentReactionType.Dislike &&
-                        cr.UserId == parameters.UserId),
+                        cr.UserId == parameters.UserId &&
+                        cr.ReactionType == ECommentReactionType.Dislike),
                 RepliesCount = c.CommentReplies!.Count,
                 ReplyToCommentId = c.ReplyToCommentId,
                 ParentCommentId = c.ParentCommentId
@@ -65,7 +65,7 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
         return (comments, totalCommentsCount.GetPageCount(parameters.PageSize));
     }
 
-    public async Task<(IEnumerable<Dal.Comment> comments, int totalPageCount)> GetAllReplies(Guid parentCommentId, Guid userId, ESort sort, int pageSize, int pageNr)
+    public async Task<(IEnumerable<Dal.Comment> comments, int totalPageCount)> GetAllReplies(Guid parentCommentId, Guid? userId, ESort sort, int pageSize, int pageNr)
     {
         var commentsQuery = DbSet
             .Include(c => c.User)
@@ -85,14 +85,14 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
                 Dislikes = c.CommentReactions!
                     .Count(cr =>
                         cr.ReactionType == ECommentReactionType.Dislike),
-                HasUserLiked = c.CommentReactions!
+                HasUserLiked = userId != null && c.CommentReactions!
                     .Any(cr =>
-                        cr.ReactionType == ECommentReactionType.Like &&
-                        cr.UserId == userId),
-                HasUserDisliked = c.CommentReactions!
+                        cr.UserId == userId &&
+                        cr.ReactionType == ECommentReactionType.Like),
+                HasUserDisliked = userId != null && c.CommentReactions!
                     .Any(cr =>
-                        cr.ReactionType == ECommentReactionType.Dislike &&
-                        cr.UserId == userId),
+                        cr.UserId == userId &&
+                        cr.ReactionType == ECommentReactionType.Dislike),
                 ReplyToUsername = c.ReplyToComment!.User!.UserName,
                 ReplyToCommentId = c.ReplyToCommentId,
                 ParentCommentId = c.ParentCommentId

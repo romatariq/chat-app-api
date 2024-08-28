@@ -14,7 +14,7 @@ public interface ICommentRepositoryCustom<TEntity>
     // custom methods shared between repository and service
     Task<(IEnumerable<TEntity> comments, int totalPageCount)> GetAll(GetAllCommentsParameters parameters);
 
-    Task<(IEnumerable<TEntity> comments, int totalPageCount)> GetAllReplies(Guid parentCommentId, Guid userId, ESort sort, int pageSize, int pageNr);
+    Task<(IEnumerable<TEntity> comments, int totalPageCount)> GetAllReplies(Guid parentCommentId, Guid? userId, ESort sort, int pageSize, int pageNr);
 
     Task<TEntity> Add(Guid urlId, Guid groupId, Guid userId, string text);
 

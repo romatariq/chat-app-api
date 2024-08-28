@@ -16,4 +16,9 @@ public static class IdentityHelpers
             .Single(c => c.Type == ClaimTypes.Name)
             .Value;
     }
+
+    public static bool IsAuthenticated(this ClaimsPrincipal user)
+    {
+        return user.Identity?.IsAuthenticated ?? false;
+    }
 }

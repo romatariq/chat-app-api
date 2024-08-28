@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApp.ApiControllers;
 
 [ApiController]
-[Authorize]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
 public class DomainReportController: ControllerBase
@@ -38,6 +37,7 @@ public class DomainReportController: ControllerBase
     }
 
     [HttpPost("{url}")]
+    [Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status201Created)]
     public async Task<ActionResult> Add([FromRoute] string url)

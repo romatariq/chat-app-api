@@ -15,7 +15,6 @@ using Comment = App.DTO.Public.v1.Comment;
 namespace WebApp.ApiControllers;
 
 [ApiController]
-[Authorize]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
 public class CommentsController : ControllerBase
@@ -40,9 +39,9 @@ public class CommentsController : ControllerBase
         [FromQuery] [Range(1, 100)] int pageSize = 25,
         [FromQuery]  ESort sort = ESort.Top)
     {
-        var userId = User.GetUserId();
+        Guid? userId = User.IsAuthenticated() ? User.GetUserId() : null;
 
-        var userInGroup = await _uow.GroupService.IsUserInGroup(userId, groupId);
+        var userInGroup = userId == null || await _uow.GroupService.IsUserInGroup(userId.Value, groupId);
         if (!userInGroup)
         {
             return BadRequest(new ErrorResponse
@@ -75,7 +74,7 @@ public class CommentsController : ControllerBase
         [FromQuery][Range(1, 100)] int pageSize = 10,
         [FromQuery] ESort sort = ESort.Old)
     {
-        var userId = User.GetUserId();
+        Guid? userId = User.IsAuthenticated() ? User.GetUserId() : null;
 
         var (comments, pageCount) = await _uow.CommentService.GetAllReplies(parentCommentId, userId, sort, pageSize, pageNr);
 
@@ -90,6 +89,7 @@ public class CommentsController : ControllerBase
 
 
     [HttpPost]
+    [Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(Comment), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
@@ -117,6 +117,7 @@ public class CommentsController : ControllerBase
 
     
     [HttpPost("replies")]
+    [Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(Comment), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]

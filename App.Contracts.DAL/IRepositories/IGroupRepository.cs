@@ -10,6 +10,6 @@ public interface IGroupRepository: IBaseRepository<Dal.Group>, IGroupRepositoryC
 public interface IGroupRepositoryCustom<TEntity>
 {
     // custom methods shared between repository and service
-    Task<IEnumerable<TEntity>> GetAll(Guid userId);
+    Task<IEnumerable<TEntity>> GetAll(Guid? userId);
     Task<bool> IsUserInGroup(Guid userId, Guid groupId);
 }

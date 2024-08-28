@@ -128,8 +128,8 @@ public class AccountController : ControllerBase
     
     
     
-    [Authorize]
     [HttpPost]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Logout()
@@ -152,5 +152,12 @@ public class AccountController : ControllerBase
         return Ok();
     }
 
-
+    [HttpGet]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public Task<ActionResult> IsLoggedIn()
+    {
+        _logger.LogInformation("{} checked if still logged in.", User.GetUsername());
+        return Task.FromResult<ActionResult>(Ok());
+    }
 }

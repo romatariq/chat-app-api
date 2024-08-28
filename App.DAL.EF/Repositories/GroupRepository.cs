@@ -1,5 +1,6 @@
 using App.Contracts.DAL.IRepositories;
 using App.Domain;
+using App.Domain.Enums;
 using Base.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Dal = App.DTO.Private.DAL;
@@ -12,11 +13,11 @@ public class GroupRepository: EfBaseRepository<Group, AppDbContext>, IGroupRepos
     {
     }
 
-    public async Task<IEnumerable<Dal.Group>> GetAll(Guid userId)
+    public async Task<IEnumerable<Dal.Group>> GetAll(Guid? userId)
     {
         return await DbContext.GroupUsers
             .Include(gu => gu.Group)
-            .Where(gu => gu.UserId == userId)
+            .Where(gu => gu.UserId == userId || gu.Group!.GroupType == EGroupType.All)
             .Select(gu => new Dal.Group
             {
                 Id = gu.GroupId,

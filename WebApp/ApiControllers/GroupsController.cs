@@ -26,11 +26,12 @@ public class GroupsController: ControllerBase
     }
     
     [HttpGet]
+    [AllowAnonymous]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(IEnumerable<Group>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<Group>>> GetAll()
     {
-        var userId = User.GetUserId();
+        Guid? userId = User.IsAuthenticated() ? User.GetUserId() : null;
 
         var groups = await _uow.GroupService.GetAll(userId);
         return groups.Select(g => _mapper.Map(g)!).ToList();

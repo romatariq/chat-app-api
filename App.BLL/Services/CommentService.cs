@@ -25,7 +25,7 @@ public class CommentService: BaseService<Dal.Comment, Bll.Comment, ICommentRepos
         return (bllComments, pageCount)!;
     }
 
-    public async Task<(IEnumerable<Bll.Comment> comments, int totalPageCount)> GetAllReplies(Guid parentCommentId, Guid userId, ESort sort, int pageSize, int pageNr)
+    public async Task<(IEnumerable<Bll.Comment> comments, int totalPageCount)> GetAllReplies(Guid parentCommentId, Guid? userId, ESort sort, int pageSize, int pageNr)
     {
         var (comments, pageCount) = await Repository.GetAllReplies(parentCommentId, userId, sort, pageSize, pageNr);
         var bllComments = comments.Select(Mapper.Map);
