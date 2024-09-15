@@ -1,6 +1,8 @@
-﻿namespace App.DTO.Public.v1;
+﻿using System.Net;
 
-public class ErrorResponse
+namespace App.DTO.Public.v1;
+public class ErrorResponse(HttpStatusCode statusCode, string message)
 {
-    public string Error { get; set; } = default!;
+    public HttpStatusCode StatusCode { get; set; } = statusCode;
+    public string Message { get; set; } = message;
 }

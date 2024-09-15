@@ -1,6 +1,7 @@
 using App.Contracts.BLL.IServices;
 using App.Contracts.DAL;
 using App.Domain.Enums;
+using App.Domain.Exceptions;
 using App.DTO.Common;
 using App.Helpers;
 using Microsoft.EntityFrameworkCore;
@@ -54,7 +55,7 @@ public class DomainDomainReportService : IDomainReportService
         var canReport = await Uow.DomainReportRepository.CanReport(domainId, userId, reportType);
         if (!canReport)
         {
-            throw new Exception("User already has an active report for this domain.");
+            throw new CustomUserBadInputException("User already has an active report for this domain.");
         }
 
         await Uow.DomainReportRepository.AddReport(domainId, userId, reportType);

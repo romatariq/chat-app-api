@@ -52,6 +52,7 @@ public class DomainReportController: ControllerBase
     }
 
     [HttpGet("[action]")]
+    [Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     public async Task<ActionResult<bool>> CanReport([FromQuery] string url)

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using App.Contracts.BLL;
+using App.Domain.Exceptions;
 using App.DTO.Common;
 using App.DTO.Private.Shared;
 using App.DTO.Public.v1;
@@ -44,10 +45,7 @@ public class CommentsController : ControllerBase
         var userInGroup = userId == null || await _uow.GroupService.IsUserInGroup(userId.Value, groupId);
         if (!userInGroup)
         {
-            return BadRequest(new ErrorResponse
-            {
-                Error = "Invalid user/group."
-            });
+            throw new CustomUserBadInputException("Invalid user/group.");
         }
 
         var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(url);
@@ -100,10 +98,7 @@ public class CommentsController : ControllerBase
         var userInGroup = await _uow.GroupService.IsUserInGroup(userId, postComment.GroupId);
         if (!userInGroup)
         {
-            return BadRequest(new ErrorResponse
-            {
-                Error = "Invalid user/group."
-            });
+            throw new CustomUserBadInputException("Invalid user/group.");
         }
 
         var urlId = await _uow.UrlService.GetOrCreateUrlId(postComment.Url);

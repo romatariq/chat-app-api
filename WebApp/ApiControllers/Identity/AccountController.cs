@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using App.DAL.EF;
+using App.Domain.Exceptions;
 using App.Domain.Identity;
 using App.DTO.Public.v1;
 using App.DTO.Public.v1.Identity;
@@ -43,28 +44,20 @@ public class AccountController : ControllerBase
     {
         if (registrationData.Password != registrationData.ConfirmPassword)
         {
-            return BadRequest(new ErrorResponse()
-            {
-                Error = "Password and confirm password must match."
-            });
+            throw new CustomUserBadInputException("Password and confirm password must match.");
         }
         
         var appUser = await _userManager.FindByEmailAsync(registrationData.Email);
         if (appUser != null)
         {
-            return BadRequest(new ErrorResponse()
-            {
-                Error = $"Email {registrationData.Email} already registered."
-            });
+            throw new CustomUserBadInputException($"Email {registrationData.Email} already registered.");
+
         }
-        
+
         appUser = await _userManager.FindByNameAsync(registrationData.UserName);
         if (appUser != null)
         {
-            return BadRequest(new ErrorResponse()
-            {
-                Error = $"Username {registrationData.UserName} already registered."
-            });
+            throw new CustomUserBadInputException($"Username {registrationData.UserName} already registered.");
         }
 
         appUser = new AppUser()
@@ -76,10 +69,7 @@ public class AccountController : ControllerBase
         var result = await _userManager.CreateAsync(appUser, registrationData.Password);
         if (!result.Succeeded)
         {
-            return BadRequest(new ErrorResponse()
-            {
-                Error = result.Errors.First().Description
-            });
+            throw new CustomUserBadInputException(result.Errors.First().Description);
         }
         
         _logger.LogInformation("Created new user. Username: {}, email: {}", registrationData.UserName, registrationData.Email);
@@ -97,29 +87,19 @@ public class AccountController : ControllerBase
         if (appUser == null)
         {
             await Task.Delay(_rnd.Next(100, 1000));
-        
-            return BadRequest(new ErrorResponse()
-            {
-                Error = "User/Password problem"
-            });
+            throw new CustomUserBadInputException("User/Password problem");
         }
-        
+
         if (!appUser.IsVerified)
         {
-            return BadRequest(new ErrorResponse()
-            {
-                Error = "User is not verified"
-            });
+            throw new CustomUserBadInputException("User is not verified");
         }
 
         var result = await _signInManager.PasswordSignInAsync(appUser, loginData.Password, true, false);
         if (!result.Succeeded)
         {
             await Task.Delay(_rnd.Next(100, 1000));
-            return BadRequest(new ErrorResponse()
-            {
-                Error = "User/Password problem"
-            });
+            throw new CustomUserBadInputException("User/Password problem");
         }
 
         _logger.LogInformation("{} logged in.", appUser.UserName);
@@ -141,10 +121,7 @@ public class AccountController : ControllerBase
             .SingleOrDefaultAsync();
         if (appUser == null)
         {
-            return BadRequest(new ErrorResponse()
-            {
-                Error = "User problem"
-            });
+            throw new CustomUserBadInputException("User problem.");
         }
 
         await _signInManager.SignOutAsync();

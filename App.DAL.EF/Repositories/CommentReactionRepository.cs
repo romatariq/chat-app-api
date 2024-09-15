@@ -1,4 +1,5 @@
 using App.Contracts.DAL.IRepositories;
+using App.Domain.Exceptions;
 using Base.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Dal = App.DTO.Private.DAL;
@@ -18,7 +19,7 @@ public class CommentReactionRepository: EfBaseRepository<Domain.CommentReaction,
         var dbReaction = await Get(reaction.CommentId, reaction.UserId);
         if (dbReaction != null)
         {
-            throw new Exception("Cannot have multiple reactions");
+            throw new CustomUserBadInputException("Cannot add a reaction because one already exists.");
         }
         
         var dbEntityEntry = (await DbSet.AddAsync(new Domain.CommentReaction()
@@ -42,7 +43,7 @@ public class CommentReactionRepository: EfBaseRepository<Domain.CommentReaction,
         var dbReaction = await Get(reaction.CommentId, reaction.UserId);
         if (dbReaction == null || dbReaction.UserId != reaction.UserId)
         {
-            throw new Exception("Cannot update reaction that does not exist or does not belong to user");
+            throw new CustomUserBadInputException("Cannot update reaction that does not exist or does not belong to user.");
         }
         
         dbReaction.ReactionType = reaction.ReactionType;
