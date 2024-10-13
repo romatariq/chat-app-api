@@ -89,7 +89,7 @@ public static class DbInitializer
 
         var group = new Group
         {
-            Name = "Public all chat",
+            Name = "Public",
             GroupType = EGroupType.All
         };
 

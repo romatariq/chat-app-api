@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using WebApp;
 using WebApp.Hubs;
+using WebApp.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +20,15 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("dev"));
 
-// builder.Services.AddDbContext<AppDbContext>(options =>
-//     options.UseNpgsql(connectionString));
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("dev"));
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+}
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -40,10 +45,13 @@ builder.Services.AddAuthentication();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.ExpireTimeSpan = TimeSpan.FromDays(7);
-    options.SlidingExpiration = true;
     options.Cookie.Name = "auth";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.IsEssential = true;
+    options.SlidingExpiration = true;
+    options.ExpireTimeSpan = TimeSpan.FromDays(30);
     options.Events.OnRedirectToLogin = redirectContext =>
     {
         redirectContext.Response.StatusCode = StatusCodes.Status401Unauthorized;

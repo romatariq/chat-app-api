@@ -1,5 +1,4 @@
 using System.Net.Mime;
-using App.DAL.EF;
 using App.Domain.Exceptions;
 using App.Domain.Identity;
 using App.DTO.Public.v1;
@@ -9,7 +8,6 @@ using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.ApiControllers.Identity;
 
@@ -23,16 +21,13 @@ public class AccountController : ControllerBase
     private readonly UserManager<AppUser> _userManager;
     private readonly ILogger<AccountController> _logger;
     private readonly Random _rnd = new();
-    private readonly AppDbContext _context;
 
 
-    public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager,
-        ILogger<AccountController> logger, AppDbContext context)
+    public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, ILogger<AccountController> logger)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _logger = logger;
-        _context = context;
     }
     
     
@@ -72,7 +67,9 @@ public class AccountController : ControllerBase
             throw new CustomUserBadInputException(result.Errors.First().Description);
         }
         
-        _logger.LogInformation("Created new user. Username: {}, email: {}", registrationData.UserName, registrationData.Email);
+        await _signInManager.SignInAsync(appUser, true);
+        
+        _logger.LogInformation("New user registered. Username: {}, email: {}", registrationData.UserName, registrationData.Email);
         return Ok();
     }
 
@@ -90,11 +87,6 @@ public class AccountController : ControllerBase
             throw new CustomUserBadInputException("User/Password problem");
         }
 
-        if (!appUser.IsVerified)
-        {
-            throw new CustomUserBadInputException("User is not verified");
-        }
-
         var result = await _signInManager.PasswordSignInAsync(appUser, loginData.Password, true, false);
         if (!result.Succeeded)
         {
@@ -106,26 +98,13 @@ public class AccountController : ControllerBase
         return Ok();
     }
     
-    
-    
     [HttpPost]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Logout()
     {
-        var userId = User.GetUserId();
-
-        var appUser = await _context.Users
-            .Where(u => u.Id == userId)
-            .SingleOrDefaultAsync();
-        if (appUser == null)
-        {
-            throw new CustomUserBadInputException("User problem.");
-        }
-
         await _signInManager.SignOutAsync();
-        _logger.LogInformation("{} logged out.", appUser.UserName);
+        _logger.LogInformation("{} logged out.", User.GetUsername());
         return Ok();
     }
 

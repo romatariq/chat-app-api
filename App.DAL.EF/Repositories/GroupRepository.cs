@@ -30,9 +30,11 @@ public class GroupRepository: EfBaseRepository<Group, AppDbContext>, IGroupRepos
 
     public async Task<bool> IsUserInGroup(Guid userId, Guid groupId)
     {
-        return await DbContext.GroupUsers
-            .AnyAsync(gu =>
-                gu.UserId == userId &&
-                gu.GroupId == groupId);
+        var isUserInGroupOrIsGroupPublic = await DbContext.Groups
+            .Include(g => g.GroupUsers)
+            .FirstOrDefaultAsync(g =>
+                g.Id == groupId &&
+                (g.GroupType == EGroupType.All || g.GroupUsers!.Any(gu => gu.GroupId == groupId)));
+        return isUserInGroupOrIsGroupPublic != null;
     }
 }

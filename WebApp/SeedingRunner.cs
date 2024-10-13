@@ -54,26 +54,22 @@ public static class SeedingRunner
             logger.LogWarning("Dropping database");
             DbInitializer.DropDatabase(context);
         }
-
         if (!isInMemoryDb && appConfiguration.GetValue<bool>("InitializeData:MigrateDatabase"))
         {
             logger.LogInformation("Migrating database");
             DbInitializer.MigrateDatabase(context);
         }
-
-        if (appConfiguration.GetValue<bool>("InitializeData:SeedIdentity"))
+        if (isInMemoryDb && appConfiguration.GetValue<bool>("InitializeData:SeedIdentity"))
         {
             logger.LogInformation("Seeding identity");
             var adminPassword = appConfiguration.GetValue<string>("InitializeData:AdminPassword");
             await DbInitializer.SeedIdentity(userManager, roleManager, adminPassword!);
         }
-
         if (appConfiguration.GetValue<bool>("InitializeData:SeedData"))
         {
             logger.LogInformation("Seeding initial app data");
             await DbInitializer.SeedData(context);
         }
-        
         if (appConfiguration.GetValue<bool>("InitializeData:SeedDevData"))
         {
             logger.LogInformation("Seeding random data for development");
