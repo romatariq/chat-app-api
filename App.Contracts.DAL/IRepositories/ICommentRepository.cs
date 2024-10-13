@@ -16,7 +16,7 @@ public interface ICommentRepositoryCustom<TEntity>
 
     Task<(IEnumerable<TEntity> comments, int totalPageCount)> GetAllReplies(Guid parentCommentId, Guid? userId, ESort sort, int pageSize, int pageNr);
 
-    Task<TEntity> Add(Guid urlId, Guid groupId, Guid userId, string text);
+    Task<TEntity> Add(Guid urlId, Guid userId, string text);
 
     Task<TEntity> AddReply(Guid parentCommentId, Guid replyToCommentId, Guid userId, string text);
 }

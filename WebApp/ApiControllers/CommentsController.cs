@@ -35,23 +35,16 @@ public class CommentsController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ResponseWithPaging<IEnumerable<Comment>>>> GetAll(
         [FromQuery] string url,
-        [FromQuery] Guid groupId,
         [FromQuery] [Range(1, int.MaxValue)] int pageNr = 1,
         [FromQuery] [Range(1, 100)] int pageSize = 25,
         [FromQuery]  ESort sort = ESort.Top)
     {
         Guid? userId = User.IsAuthenticated() ? User.GetUserId() : null;
 
-        var userInGroup = userId == null || await _uow.GroupService.IsUserInGroup(userId.Value, groupId);
-        if (!userInGroup)
-        {
-            throw new CustomUserBadInputException("Invalid user/group.");
-        }
-
         var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(url);
 
         var (comments, pageCount) = await _uow.CommentService
-                .GetAll(new GetAllCommentsParameters(groupId, userId, domain, path, parameters, sort, pageNr, pageSize));
+                .GetAll(new GetAllCommentsParameters(userId, domain, path, parameters, sort, pageNr, pageSize));
 
         return new ResponseWithPaging<IEnumerable<Comment>>
         {
@@ -95,15 +88,9 @@ public class CommentsController : ControllerBase
     {
         var userId = User.GetUserId();
 
-        var userInGroup = await _uow.GroupService.IsUserInGroup(userId, postComment.GroupId);
-        if (!userInGroup)
-        {
-            throw new CustomUserBadInputException("Invalid user/group.");
-        }
-
         var urlId = await _uow.UrlService.GetOrCreateUrlId(postComment.Url);
         
-        var comment = await _uow.CommentService.Add(urlId, postComment.GroupId, userId, postComment.Text);
+        var comment = await _uow.CommentService.Add(urlId, userId, postComment.Text);
         await _uow.SaveChangesAsync();
         comment.Username = User.GetUsername();
 

@@ -14,8 +14,6 @@ public class AppUser: IdentityUser<Guid>, IDomainEntityId
     
     public ICollection<Message>? Messages { get; set; }
 
-    public ICollection<GroupUser>? GroupUsers { get; set; }
-
     public ICollection<CommentReaction>? CommentReactions { get; set; }
 
     public ICollection<DomainReport>? DomainReports { get; set; }

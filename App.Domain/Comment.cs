@@ -17,10 +17,7 @@ public class Comment: DomainEntityId
     public AppUser? User { get; set; }
 
 
-    // if parent comment - must have GroupId and UrlId
-    public Guid? GroupId { get; set; }
-    public Group? Group { get; set; }
-
+    // if parent comment - must have UrlId
     public Guid? UrlId { get; set; }
     public Url? Url { get; set; }
 

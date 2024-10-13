@@ -32,9 +32,9 @@ public class CommentService: BaseService<Dal.Comment, Bll.Comment, ICommentRepos
         return (bllComments, pageCount)!;
     }
 
-    public async Task<Bll.Comment> Add(Guid urlId, Guid groupId, Guid userId, string text)
+    public async Task<Bll.Comment> Add(Guid urlId, Guid userId, string text)
     {
-        var comment = await Repository.Add(urlId, groupId, userId, text);
+        var comment = await Repository.Add(urlId, userId, text);
         return Mapper.Map(comment)!;
     }
 

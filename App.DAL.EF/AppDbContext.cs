@@ -12,8 +12,6 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     public DbSet<Comment> Comments { get; set; } = default!;
     public DbSet<CommentReaction> CommentReactions { get; set; } = default!;
     public DbSet<DomainReport> DomainReports { get; set; } = default!;
-    public DbSet<Group> Groups { get; set; } = default!;
-    public DbSet<GroupUser> GroupUsers { get; set; } = default!;
     public DbSet<Url> Urls { get; set; } = default!;
     public DbSet<WebDomain> WebDomains { get; set; } = default!;
     public DbSet<Message> Messages { get; set; } = default!;

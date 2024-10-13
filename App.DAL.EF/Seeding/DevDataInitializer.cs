@@ -28,11 +28,6 @@ internal static class DevDataInitializer
     {
         if (await ctx.Comments.AnyAsync()) return;
 
-        var allChatId = await ctx.Groups
-            .Where(g => g.GroupType == EGroupType.All)
-            .Select(g => g.Id)
-            .SingleAsync();
-
         var adminId = await ctx.Users
             .Where(u => u.UserName!.ToLower() == "admin")
             .Select(u => u.Id)
@@ -51,7 +46,6 @@ internal static class DevDataInitializer
             comments.Add(new Comment()
             {
                 UserId = adminId,
-                GroupId = allChatId,
                 UrlId = urlId,
                 CreatedAtUtc = DateTime.UtcNow,
                 Text =

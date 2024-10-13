@@ -25,12 +25,6 @@ public static class DbInitializer
         await SeedUsers(userManager, adminPassword);
     }
 
-    public static async Task SeedData(AppDbContext ctx)
-    {
-        await SeedGroups(ctx);
-        await ctx.SaveChangesAsync();
-    }
-
     public static async Task SeedDevData(AppDbContext ctx)
     {
         await DevDataInitializer.SeedDevUrls(ctx);
@@ -81,28 +75,5 @@ public static class DbInitializer
         {
             throw new ApplicationException($"Cannot add role to admin, {result}");
         }
-    }
-
-    private static async Task SeedGroups(AppDbContext ctx)
-    {
-        if (await ctx.Groups.AnyAsync()) return;
-
-        var group = new Group
-        {
-            Name = "Public",
-            GroupType = EGroupType.All
-        };
-
-        await ctx.Groups.AddAsync(group);
-
-        var groupUsers = await ctx.Users
-            .Select(u => new GroupUser
-            {
-                GroupId = group.Id,
-                UserId = u.Id
-            })
-            .ToListAsync();
-
-        await ctx.GroupUsers.AddRangeAsync(groupUsers);
     }
 }

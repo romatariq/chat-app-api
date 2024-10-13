@@ -27,7 +27,6 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
             .Include(c => c.CommentReplies)
             .Where(c =>
                 c.ParentCommentId == null &&
-                c.GroupId == parameters.GroupId &&
                 c.Url!.WebDomain!.Name == parameters.Domain &&
                 c.Url.Path == parameters.Path &&
                 c.Url.Params == parameters.Parameters)
@@ -106,22 +105,21 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
         return (comments, totalCommentsCount.GetPageCount(pageSize));
     }
 
-    public async Task<Dal.Comment> Add(Guid urlId, Guid groupId, Guid userId, string text)
+    public async Task<Dal.Comment> Add(Guid urlId, Guid userId, string text)
     {
-        return await Add(urlId, groupId, null, null, userId, text);
+        return await Add(urlId, null, null, userId, text);
     }
 
     public async Task<Dal.Comment> AddReply(Guid parentCommentId, Guid replyToCommentId, Guid userId, string text)
     {
-        return await Add(null, null, parentCommentId, replyToCommentId, userId, text);
+        return await Add(null, parentCommentId, replyToCommentId, userId, text);
     }
 
-    private async Task<Dal.Comment> Add(Guid? urlId, Guid? groupId, Guid? parentCommentId, Guid? replyToCommentId, Guid userId, string text)
+    private async Task<Dal.Comment> Add(Guid? urlId, Guid? parentCommentId, Guid? replyToCommentId, Guid userId, string text)
     {
         var comment = new Domain.Comment
         {
             Text = text,
-            GroupId = groupId,
             UserId = userId,
             UrlId = urlId,
             ParentCommentId = parentCommentId,
