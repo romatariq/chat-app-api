@@ -22,7 +22,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         finally
         {
             stopwatch.Stop();
-            logger.LogInformation("Took {}ms to execute '{}'", stopwatch.ElapsedMilliseconds, context.Request.Path);
+            logger.LogInformation("Took {}ms to execute {} '{}'", stopwatch.ElapsedMilliseconds, context.Request.Method, context.Request.Path);
         }
     }
 
