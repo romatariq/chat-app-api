@@ -13,15 +13,8 @@ public class CommentReactionRepository: EfBaseRepository<Domain.CommentReaction,
     {
     }
 
-    // TODO: global error handling
     public async Task<Dal.CommentReaction> Add(Dal.CommentReaction reaction)
     {
-        var dbReaction = await Get(reaction.CommentId, reaction.UserId);
-        if (dbReaction != null)
-        {
-            throw new CustomUserBadInputException("Cannot add a reaction because one already exists.");
-        }
-        
         var dbEntityEntry = (await DbSet.AddAsync(new Domain.CommentReaction()
         {
             ReactionType = reaction.ReactionType,
@@ -41,9 +34,9 @@ public class CommentReactionRepository: EfBaseRepository<Domain.CommentReaction,
     public async Task<Dal.CommentReaction> Update(Dal.CommentReaction reaction)
     {
         var dbReaction = await Get(reaction.CommentId, reaction.UserId);
-        if (dbReaction == null || dbReaction.UserId != reaction.UserId)
+        if (dbReaction == null)
         {
-            throw new CustomUserBadInputException("Cannot update reaction that does not exist or does not belong to user.");
+            throw new CustomUserBadInputException("Cannot update reaction that does not exist.");
         }
         
         dbReaction.ReactionType = reaction.ReactionType;
@@ -60,7 +53,7 @@ public class CommentReactionRepository: EfBaseRepository<Domain.CommentReaction,
     public async Task Delete(Guid commentId, Guid userId)
     {
         var reaction = await Get(commentId, userId);
-        if (reaction != null && reaction.UserId == userId)
+        if (reaction != null)
         {
             DbSet.Remove(reaction);
         }

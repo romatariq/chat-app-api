@@ -17,7 +17,6 @@ public class MessageRepository: EfBaseRepository<Domain.Message, AppDbContext>, 
     {
         var domainMessage = new Domain.Message()
         {
-            CreatedAtUtc = DateTime.UtcNow,
             Text = message,
             UserId = userId,
             UrlId = urlId
