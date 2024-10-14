@@ -107,39 +107,47 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
 
     public async Task<Dal.Comment> Add(Guid urlId, Guid userId, string text)
     {
-        return await Add(urlId, null, null, userId, text);
-    }
-
-    public async Task<Dal.Comment> AddReply(Guid parentCommentId, Guid replyToCommentId, Guid userId, string text)
-    {
-        return await Add(null, parentCommentId, replyToCommentId, userId, text);
-    }
-
-    private async Task<Dal.Comment> Add(Guid? urlId, Guid? parentCommentId, Guid? replyToCommentId, Guid userId, string text)
-    {
         var comment = new Domain.Comment
         {
             Text = text,
             UserId = userId,
             UrlId = urlId,
+        };
+        return await Add(comment);
+    }
+
+    public async Task<Dal.Comment> AddReply(Guid parentCommentId, Guid replyToCommentId, Guid userId, string text)
+    {
+        var reply = await DbSet
+            .Include(c => c.User)
+            .Where(c => c.Id == replyToCommentId)
+            .FirstAsync();
+
+        var comment = new Domain.Comment
+        {
+            Text = text,
+            UserId = userId,
+            UrlId = reply.UrlId,
             ParentCommentId = parentCommentId,
             ReplyToCommentId = replyToCommentId
         };
-        await DbSet.AddAsync(comment);
-        var replyToUsername = replyToCommentId == null ? null : await DbSet
-            .Include(c => c.User)
-            .Where(c => c.Id == comment.ReplyToCommentId)
-            .Select(c => c.User!.UserName)
-            .FirstOrDefaultAsync();
 
+        var addedComment = await Add(comment);
+        addedComment.ReplyToUsername = reply.User!.UserName;
+        
+        return addedComment;
+    }
+
+    private async Task<Dal.Comment> Add(Domain.Comment comment)
+    {
+        await DbSet.AddAsync(comment);
         return new Dal.Comment
         {
             Id = comment.Id,
             CreatedAtUtc = comment.CreatedAtUtc,
             Text = comment.Text,
-            ReplyToUsername = replyToUsername,
-            ReplyToCommentId = replyToCommentId,
-            ParentCommentId = parentCommentId
+            ReplyToCommentId = comment.ReplyToCommentId,
+            ParentCommentId = comment.ParentCommentId
         };
     }
 }

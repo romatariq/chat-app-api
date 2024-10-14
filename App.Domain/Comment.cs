@@ -17,11 +17,10 @@ public class Comment: DomainEntityId
     public AppUser? User { get; set; }
 
 
-    // if parent comment - must have UrlId
-    public Guid? UrlId { get; set; }
+    public Guid UrlId { get; set; }
     public Url? Url { get; set; }
 
-    // if reply - must have ParentCommentId
+    // if reply - must have ParentCommentId and ReplyToCommentId
     public Guid? ParentCommentId { get; set; }
     public Comment? ParentComment { get; set; }
 

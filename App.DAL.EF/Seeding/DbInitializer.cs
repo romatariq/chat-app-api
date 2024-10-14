@@ -62,7 +62,6 @@ public static class DbInitializer
             Email = adminData.email,
             UserName = adminData.userName,
             EmailConfirmed = true,
-            IsVerified = true
         };
         var result = await userManager.CreateAsync(admin, adminPassword);
         if (!result.Succeeded)

@@ -7,9 +7,6 @@ public class AppUser: IdentityUser<Guid>, IDomainEntityId
 {
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
     
-    public bool IsVerified { get; set; }
-
-
     public ICollection<Comment>? Comments { get; set; }
     
     public ICollection<Message>? Messages { get; set; }
