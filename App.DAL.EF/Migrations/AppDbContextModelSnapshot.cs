@@ -17,7 +17,7 @@ namespace App.DAL.EF.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -31,7 +31,10 @@ namespace App.DAL.EF.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("GroupId")
+                    b.Property<Guid?>("ParentCommentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ReplyToCommentId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Text")
@@ -47,7 +50,9 @@ namespace App.DAL.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("ParentCommentId");
+
+                    b.HasIndex("ReplyToCommentId");
 
                     b.HasIndex("UrlId");
 
@@ -110,49 +115,6 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("DomainReports");
                 });
 
-            modelBuilder.Entity("App.Domain.Group", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("GroupType")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("App.Domain.GroupUser", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsOwner")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("GroupUsers");
-                });
-
             modelBuilder.Entity("App.Domain.Identity.AppRole", b =>
                 {
                     b.Property<Guid>("Id")
@@ -162,6 +124,9 @@ namespace App.DAL.EF.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -201,9 +166,6 @@ namespace App.DAL.EF.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsVerified")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("LockoutEnabled")
@@ -286,6 +248,9 @@ namespace App.DAL.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Params")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
@@ -309,6 +274,9 @@ namespace App.DAL.EF.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -425,11 +393,13 @@ namespace App.DAL.EF.Migrations
 
             modelBuilder.Entity("App.Domain.Comment", b =>
                 {
-                    b.HasOne("App.Domain.Group", "Group")
-                        .WithMany("Comments")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("App.Domain.Comment", "ParentComment")
+                        .WithMany("CommentReplies")
+                        .HasForeignKey("ParentCommentId");
+
+                    b.HasOne("App.Domain.Comment", "ReplyToComment")
+                        .WithMany("ReplyReplies")
+                        .HasForeignKey("ReplyToCommentId");
 
                     b.HasOne("App.Domain.Url", "Url")
                         .WithMany("Comments")
@@ -443,7 +413,9 @@ namespace App.DAL.EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Group");
+                    b.Navigation("ParentComment");
+
+                    b.Navigation("ReplyToComment");
 
                     b.Navigation("Url");
 
@@ -486,25 +458,6 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("User");
 
                     b.Navigation("WebDomain");
-                });
-
-            modelBuilder.Entity("App.Domain.GroupUser", b =>
-                {
-                    b.HasOne("App.Domain.Group", "Group")
-                        .WithMany("GroupUsers")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("App.Domain.Identity.AppUser", "User")
-                        .WithMany("GroupUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Group");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("App.Domain.Message", b =>
@@ -591,13 +544,10 @@ namespace App.DAL.EF.Migrations
             modelBuilder.Entity("App.Domain.Comment", b =>
                 {
                     b.Navigation("CommentReactions");
-                });
 
-            modelBuilder.Entity("App.Domain.Group", b =>
-                {
-                    b.Navigation("Comments");
+                    b.Navigation("CommentReplies");
 
-                    b.Navigation("GroupUsers");
+                    b.Navigation("ReplyReplies");
                 });
 
             modelBuilder.Entity("App.Domain.Identity.AppUser", b =>
@@ -607,8 +557,6 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("DomainReports");
-
-                    b.Navigation("GroupUsers");
 
                     b.Navigation("Messages");
                 });
