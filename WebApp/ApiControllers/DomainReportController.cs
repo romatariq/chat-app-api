@@ -2,6 +2,7 @@ using System.Net.Mime;
 using App.Contracts.BLL;
 using App.DTO.Common;
 using App.DTO.Public.v1;
+using App.Helpers;
 using Asp.Versioning;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;

@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using App.Contracts.BLL;
-using App.Domain.Exceptions;
 using App.DTO.Common;
 using App.DTO.Private.Shared;
 using App.DTO.Public.v1;
+using App.Helpers;
 using App.Mappers.AutoMappers.PublicDTO;
 using Asp.Versioning;
 using AutoMapper;

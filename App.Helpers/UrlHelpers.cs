@@ -1,7 +1,7 @@
 using System.Text;
 using System.Web;
 
-namespace Base.Helpers;
+namespace App.Helpers;
 
 public static class UrlHelpers
 {
