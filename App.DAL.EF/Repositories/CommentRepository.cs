@@ -24,7 +24,7 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
             .ThenInclude(u => u!.WebDomain)
             .Include(c => c.User)
             .Include(c => c.CommentReactions)
-            .Include(c => c.CommentReplies)
+            .Include(c => c.ParentCommentReplies)
             .Where(c =>
                 c.ParentCommentId == null &&
                 c.Url!.WebDomain!.Name == parameters.Domain &&
@@ -51,7 +51,7 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
                     .Any(cr =>
                         cr.UserId == parameters.UserId &&
                         cr.ReactionType == ECommentReactionType.Dislike),
-                RepliesCount = c.CommentReplies!.Count,
+                RepliesCount = c.ParentCommentReplies!.Count,
                 ReplyToCommentId = c.ReplyToCommentId,
                 ParentCommentId = c.ParentCommentId
             })

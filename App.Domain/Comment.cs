@@ -27,8 +27,8 @@ public class Comment: DomainEntity
     public ICollection<CommentReaction>? CommentReactions { get; set; }
 
     [InverseProperty(nameof(ParentComment))]
-    public ICollection<Comment>? CommentReplies { get; set; }
+    public ICollection<Comment>? ParentCommentReplies { get; set; }
 
     [InverseProperty(nameof(ReplyToComment))]
-    public ICollection<Comment>? ReplyReplies { get; set; }
+    public ICollection<Comment>? DirectCommentReplies { get; set; }
 }
