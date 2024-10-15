@@ -120,6 +120,7 @@ else
     app.UseHsts();
 }
 
+app.UseMiddleware<ResponseTimerMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
