@@ -3,7 +3,7 @@ version: "3.9"
 services:
   chat-app-db:
     container_name: "chat-app-db"
-    image: "postgres:15.2-bullseye"
+    image: "postgres:17.0-bullseye"
     restart: unless-stopped
     environment:
       - POSTGRES_USER=postgres
@@ -16,7 +16,7 @@ services:
       # external:internal
       - "5445:5432"
     volumes:
-      - "distributed-db-postgres-volume:/var/lib/postgresql/data"
+      - "chatpp-app-db-postgres-volume:/var/lib/postgresql/data"
 
 volumes:
-  distributed-db-postgres-volume:
+  chatpp-app-db-postgres-volume:
