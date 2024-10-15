@@ -4,12 +4,10 @@ using Base.Domain;
 
 namespace App.Domain;
 
-public class Message: DomainEntityId
+public class Message: DomainEntity
 {
     [MaxLength(100)]
     public string Text { get; set; } = default!;
-
-    public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 
 
     public Guid UrlId { get; set; }

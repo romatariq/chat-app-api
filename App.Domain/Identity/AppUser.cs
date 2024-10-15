@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace App.Domain.Identity;
 
-public class AppUser: IdentityUser<Guid>, IDomainEntityId
+public class AppUser: IdentityUser<Guid>, IDomainEntity
 {
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
     

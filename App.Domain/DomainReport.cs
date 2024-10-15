@@ -4,10 +4,8 @@ using Base.Domain;
 
 namespace App.Domain;
 
-public class DomainReport: DomainEntityId
+public class DomainReport: DomainEntity
 {
-    public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
-
     public EReportType ReportType { get; set; }
     
     public Guid UserId { get; set; }

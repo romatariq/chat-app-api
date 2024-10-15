@@ -3,7 +3,7 @@ using Base.Domain;
 
 namespace App.Domain;
 
-public class WebDomain: DomainEntityId
+public class WebDomain: DomainEntity
 {
     [MaxLength(300)]
     public string Name { get; set; } = default!;

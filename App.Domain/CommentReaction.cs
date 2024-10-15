@@ -4,10 +4,8 @@ using Base.Domain;
 
 namespace App.Domain;
 
-public class CommentReaction: DomainEntityId
+public class CommentReaction: DomainEntity
 {
-    public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
-
     public ECommentReactionType ReactionType { get; set; }
 
 

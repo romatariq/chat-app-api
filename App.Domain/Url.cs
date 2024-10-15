@@ -3,7 +3,7 @@ using Base.Domain;
 
 namespace App.Domain;
 
-public class Url: DomainEntityId
+public class Url: DomainEntity
 {
     [MaxLength(1000)]
     public string? Path { get; set; }

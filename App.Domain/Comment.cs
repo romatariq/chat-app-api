@@ -5,17 +5,14 @@ using Base.Domain;
 
 namespace App.Domain;
 
-public class Comment: DomainEntityId
+public class Comment: DomainEntity
 {
     [MaxLength(1000)]
     public string Text { get; set; } = default!;
 
-    public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
-
 
     public Guid UserId { get; set; }
     public AppUser? User { get; set; }
-
 
     public Guid UrlId { get; set; }
     public Url? Url { get; set; }
