@@ -38,7 +38,6 @@ builder.Services.AddScoped<IAppBLL, AppBLL>();
 builder.Services.AddIdentity<AppUser, AppRole>(
         options => options.SignIn.RequireConfirmedAccount = false)
     .AddDefaultTokenProviders()
-    .AddDefaultUI()
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddAuthentication();
