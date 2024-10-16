@@ -8,6 +8,5 @@ public class CommentReaction
     [Required]
     public Guid CommentId { get; set; }
 
-    [Required]
     public ECommentReactionType ReactionType { get; set; }
 }
