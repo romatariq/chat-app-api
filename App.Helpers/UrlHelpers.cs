@@ -7,8 +7,8 @@ public static class UrlHelpers
 {
     public static (string domain, string? path, string? parameters) ParseEncodedUrl(string url)
     {
-        var (domain, path, parameters) = url.DecodeUrl().SplitUrl();
-        return (domain, path.ParsePath(), parameters.ParseParameters());
+        var parts = url.DecodeUrl().SplitUrl();
+        return (parts.domain.ParseDomain(), parts.path.ParsePath(), parts.parameters.ParseParameters());
     }
 
     private static string DecodeUrl(this string url)
@@ -19,31 +19,44 @@ public static class UrlHelpers
     private static (string domain, string path, string parameters) SplitUrl(this string url)
     {
         var uri = new Uri(url);
+        return (uri.Authority, uri.LocalPath, uri.Query);
+    }
 
-        // var domain = uri.Host;
-        var domain = uri.Authority;
-        var path = uri.LocalPath;
-        var parameters = uri.Query;
 
-        return (domain, path, parameters);
+    private static string ParseDomain(this string domain)
+    {
+        var lowerDomain = domain.ToLower();
+        if (lowerDomain.StartsWith("www.") && lowerDomain.Count(x => x == '.') > 1)
+        {
+            return lowerDomain[4..];
+        }
+        return lowerDomain;
+    }
+
+    private static string? ParsePath(this string path)
+    {
+        return path == "/" ? null : path.TrimEnd('/');
     }
 
     private static string? ParseParameters(this string parameters)
     {
-        var paramCollection = HttpUtility.ParseQueryString(parameters);
-
         var orderedParams = new SortedDictionary<string, string>();
 
+        var paramCollection = HttpUtility.ParseQueryString(parameters);
         foreach (var key in paramCollection.AllKeys)
         {
-            if (key == null || paramCollection[key] == null) continue;
-            orderedParams[key] = paramCollection[key]!;
+            if (key != null && paramCollection[key] != null)
+            {
+                orderedParams[key] = paramCollection[key]!;
+            }
         }
 
-        if (orderedParams.Count == 0) return null;
+        if (orderedParams.Count == 0)
+        {
+            return null;
+        }
         
         var orderedUrlBuilder = new StringBuilder();
-
         foreach (var kvp in orderedParams)
         {
             orderedUrlBuilder.Append($"&{kvp.Key}={kvp.Value}");
@@ -51,10 +64,4 @@ public static class UrlHelpers
 
         return orderedUrlBuilder.ToString().TrimStart('&');
     }
-    
-    private static string? ParsePath(this string path)
-    {
-        return path == "/" ? null : path.TrimEnd('/');
-    }
-
 }
