@@ -1,7 +1,6 @@
 using App.Contracts.DAL.IRepositories;
 using App.Domain.Enums;
 using App.DTO.Common;
-using App.DTO.Private.Shared;
 using App.Helpers;
 using Base.DAL.EF;
 using Base.Helpers;
@@ -17,7 +16,7 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
     {
     }
 
-    public async Task<(IEnumerable<Dal.Comment> comments, int totalPageCount)> GetAll(GetAllCommentsParameters parameters)
+    public async Task<(IEnumerable<Dal.Comment> comments, int totalPageCount)> GetAll(Guid? userId, string domain, string? path, string? parameters, ESort sort, int pageNr, int pageSize)
     {
         var commentsQuery = DbSet
             .Include(c => c.Url)
@@ -27,10 +26,10 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
             .Include(c => c.ParentCommentReplies)
             .Where(c =>
                 c.ParentCommentId == null &&
-                c.Url!.WebDomain!.Name == parameters.Domain &&
-                c.Url.Path == parameters.Path &&
-                c.Url.Params == parameters.Parameters)
-            .SortComments(parameters.Sort)
+                c.Url!.WebDomain!.Name == domain &&
+                c.Url.Path == path &&
+                c.Url.Params == parameters)
+            .SortComments(sort)
             .Select(c => new Dal.Comment
             {
                 Id = c.Id,
@@ -43,13 +42,13 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
                 Dislikes = c.CommentReactions!
                     .Count(cr =>
                         cr.ReactionType == ECommentReactionType.Dislike),
-                HasUserLiked = parameters.UserId != null && c.CommentReactions!
+                HasUserLiked = userId != null && c.CommentReactions!
                     .Any(cr =>
-                        cr.UserId == parameters.UserId &&
+                        cr.UserId == userId &&
                         cr.ReactionType == ECommentReactionType.Like),
-                HasUserDisliked = parameters.UserId != null && c.CommentReactions!
+                HasUserDisliked = userId != null && c.CommentReactions!
                     .Any(cr =>
-                        cr.UserId == parameters.UserId &&
+                        cr.UserId == userId &&
                         cr.ReactionType == ECommentReactionType.Dislike),
                 RepliesCount = c.ParentCommentReplies!.Count,
                 ReplyToCommentId = c.ReplyToCommentId,
@@ -58,10 +57,10 @@ public class CommentRepository: EfBaseRepository<Domain.Comment, AppDbContext>, 
             .AsQueryable();
 
         var comments = await commentsQuery
-            .Paging(parameters.PageNr, parameters.PageSize)
+            .Paging(pageNr, pageSize)
             .ToListAsync();
         var totalCommentsCount = await commentsQuery.CountAsync();
-        return (comments, totalCommentsCount.GetPageCount(parameters.PageSize));
+        return (comments, totalCommentsCount.GetPageCount(pageSize));
     }
 
     public async Task<(IEnumerable<Dal.Comment> comments, int totalPageCount)> GetAllReplies(Guid parentCommentId, Guid? userId, ESort sort, int pageSize, int pageNr)

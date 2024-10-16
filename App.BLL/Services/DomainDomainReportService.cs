@@ -3,6 +3,7 @@ using App.Contracts.DAL;
 using App.Domain.Enums;
 using App.Domain.Exceptions;
 using App.DTO.Common;
+using App.DTO.Public.v1;
 using App.Helpers;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,7 @@ public class DomainDomainReportService : IDomainReportService
         Uow = uow;
     }
 
-    public async Task<IEnumerable<DomainReport>> GetReports(string domain, EDomainReportTimeframe timeFrame)
+    public async Task<DomainReports> GetReports(string encodedUrl, EDomainReportTimeframe timeFrame)
     {
         var result = new List<DomainReport>();
 
@@ -36,7 +37,9 @@ public class DomainDomainReportService : IDomainReportService
             };
         }
 
+        var domain = UrlHelpers.ParseEncodedUrl(encodedUrl).domain;
         var reports = await Uow.DomainReportRepository.GetReports(domain, timeFrame);
+
         foreach (var queriedReport in reports)
         {
             var relatedDomainReport = result.First(report =>
@@ -47,7 +50,11 @@ public class DomainDomainReportService : IDomainReportService
             relatedDomainReport.ConnectionIssues = queriedReport.ConnectionIssues;
         }
 
-        return result;
+        return new DomainReports
+        {
+            Reports = result,
+            Domain = domain
+        };
     }
 
     public async Task AddReport(Guid domainId, Guid userId, EReportType reportType = EReportType.ConnectionIssue)

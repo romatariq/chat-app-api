@@ -15,16 +15,17 @@ public class UrlService: IUrlService
 
     public async Task<Guid> GetOrCreateUrlId(string encodedUrl)
     {
-        var (domain, path, parameters) = UrlHelpers.ParseEncodedUrl(encodedUrl);
+        var urlParts = UrlHelpers.ParseEncodedUrl(encodedUrl);
 
-        var domainId = await Uow.UrlRepository.GetOrCreateDomainId(domain);
-        var urlId = await Uow.UrlRepository.GetOrCreateUrlId(domainId, path, parameters);
+        var domainId = await Uow.UrlRepository.GetOrCreateDomainId(urlParts.domain);
+        var urlId = await Uow.UrlRepository.GetOrCreateUrlId(domainId, urlParts.path, urlParts.parameters);
 
         return urlId;
     }
 
-    public async Task<Guid> GetOrCreateDomainId(string domain)
+    public async Task<Guid> GetOrCreateDomainId(string encodedUrl)
     {
+        var domain = UrlHelpers.ParseEncodedUrl(encodedUrl).domain;
         return await Uow.UrlRepository.GetOrCreateDomainId(domain);
     }
 }

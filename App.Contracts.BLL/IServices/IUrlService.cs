@@ -6,4 +6,5 @@ public interface IUrlService: IUrlRepositoryCustom
 {
     // add your custom service methods here
     Task<Guid> GetOrCreateUrlId(string encodedUrl);
+    Task<Guid> GetOrCreateDomainId(string encodedUrl);
 }
