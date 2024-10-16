@@ -1,6 +1,6 @@
 using App.Domain.Enums;
 using App.DTO.Common;
-using PublicV1 = App.DTO.Public.v1;
+
 namespace App.Contracts.DAL.IRepositories;
 
 public interface IDomainReportRepository: IDomainReportRepositoryCustom

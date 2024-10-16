@@ -1,8 +1,6 @@
-using System.Net.Mime;
 using App.Contracts.BLL;
 using App.DTO.Common;
 using App.DTO.Public.v1;
-using App.Helpers;
 using Asp.Versioning;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +23,12 @@ public class DomainReportController: ControllerBase
     [HttpGet]
     public async Task<DomainReports> GetAll([FromQuery] string url, EDomainReportTimeframe timeframe)
     {
-        return await _uow.DomainReportService.GetReports(url, timeframe);
+        var result = await _uow.DomainReportService.GetReports(url, timeframe);
+        return new DomainReports
+        {
+            Reports = result.reports,
+            Domain = result.domain,
+        };
     }
 
     [HttpPost("{url}")]
