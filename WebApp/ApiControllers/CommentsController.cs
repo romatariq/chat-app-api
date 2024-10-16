@@ -29,9 +29,9 @@ public class CommentsController : ControllerBase
 
     [HttpGet]
     [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(ResponseWithPaging<IEnumerable<Comment>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseWithPaging<Comment>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<ResponseWithPaging<IEnumerable<Comment>>>> GetAll(
+    public async Task<ActionResult<ResponseWithPaging<Comment>>> GetAll(
         [FromQuery] string url,
         [FromQuery] [Range(1, int.MaxValue)] int pageNr = 1,
         [FromQuery] [Range(1, 100)] int pageSize = 25,
@@ -41,7 +41,7 @@ public class CommentsController : ControllerBase
 
         var (comments, pageCount) = await _uow.CommentService.GetAll(userId, url, sort, pageNr, pageSize);
 
-        return new ResponseWithPaging<IEnumerable<Comment>>
+        return new ResponseWithPaging<Comment>
         {
             Data = comments.Select(_commentMapper.Map)!,
             PageNr = pageNr,
@@ -52,9 +52,9 @@ public class CommentsController : ControllerBase
 
     [HttpGet("replies")]
     [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(ResponseWithPaging<IEnumerable<Comment>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseWithPaging<Comment>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<ResponseWithPaging<IEnumerable<Comment>>>> GetAllReplies(
+    public async Task<ActionResult<ResponseWithPaging<Comment>>> GetAllReplies(
         [FromQuery] Guid parentCommentId,
         [FromQuery][Range(1, int.MaxValue)] int pageNr = 1,
         [FromQuery][Range(1, 100)] int pageSize = 10,
@@ -64,7 +64,7 @@ public class CommentsController : ControllerBase
 
         var (comments, pageCount) = await _uow.CommentService.GetAllReplies(parentCommentId, userId, sort, pageSize, pageNr);
 
-        return new ResponseWithPaging<IEnumerable<Comment>>
+        return new ResponseWithPaging<Comment>
         {
             Data = comments.Select(_commentMapper.Map)!,
             PageNr = pageNr,
