@@ -23,10 +23,10 @@ public class ChatHub: Hub
         await Clients.Caller.SendAsync("ReceiveGroupId", urlId);
         await Clients.Caller.SendAsync("ReceiveMessages", messages);
     }
-    
-    public Task LeaveChat(Guid urlId)
+
+    public async Task LeaveChat(Guid urlId)
     {
-        return Groups.RemoveFromGroupAsync(Context.ConnectionId, urlId.ToString());
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, urlId.ToString());
     }
 
     [Authorize]
