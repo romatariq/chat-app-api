@@ -15,5 +15,5 @@ public interface ICommentReactionRepositoryCustom<TEntity>
     
     Task<TEntity> Update(TEntity reaction);
     
-    Task Delete(Guid commentId, Guid userId);
+    Task Delete(TEntity reaction);
 }

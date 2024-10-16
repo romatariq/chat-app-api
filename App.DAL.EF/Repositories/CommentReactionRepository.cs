@@ -50,13 +50,14 @@ public class CommentReactionRepository: EfBaseRepository<Domain.CommentReaction,
         };
     }
 
-    public async Task Delete(Guid commentId, Guid userId)
+    public async Task Delete(Dal.CommentReaction reaction)
     {
-        var reaction = await Get(commentId, userId);
-        if (reaction != null)
+        var reactionFromDb = await Get(reaction.CommentId, reaction.UserId);
+        if (reactionFromDb == null)
         {
-            DbSet.Remove(reaction);
+            throw new CustomUserBadInputException("Cannot delete reaction that doesn't exist");
         }
+        DbSet.Remove(reactionFromDb);
     }
 
     public async Task<Domain.CommentReaction?> Get(Guid commentId, Guid userId)

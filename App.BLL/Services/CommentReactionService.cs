@@ -35,8 +35,8 @@ public class CommentReactionService: BaseService<Dal.CommentReaction, Bll.Commen
         return Mapper.Map(updatedReaction)!;
     }
 
-    public async Task Delete(Guid commentId, Guid userId)
+    public async Task Delete(Bll.CommentReaction reaction)
     {
-        await Repository.Delete(commentId, userId);
+        await Repository.Delete(Mapper.Map(reaction)!);
     }
 }

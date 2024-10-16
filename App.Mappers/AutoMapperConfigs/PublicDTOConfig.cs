@@ -10,6 +10,6 @@ public class PublicDTOConfig : Profile
     {
         CreateMap<Bll.Comment, PublicV1.Comment>().ReverseMap();
         CreateMap<Bll.Message, PublicV1.Message>().ReverseMap();
-        CreateMap<Bll.CommentReaction, PublicV1.CommentReaction>();
+        CreateMap<Bll.CommentReaction, PublicV1.CommentReaction>().ReverseMap();
     }
 }
