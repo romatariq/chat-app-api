@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Net.Mime;
 using App.Contracts.BLL;
 using App.DTO.Common;
 using App.DTO.Public.v1;
@@ -28,18 +27,16 @@ public class CommentsController : ControllerBase
     }
 
     [HttpGet]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(ResponseWithPaging<Comment>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<ResponseWithPaging<Comment>>> GetAll(
+    public async Task<ResponseWithPaging<Comment>> GetAll(
         [FromQuery] string url,
         [FromQuery] [Range(1, int.MaxValue)] int pageNr = 1,
         [FromQuery] [Range(1, 100)] int pageSize = 25,
-        [FromQuery]  ESort sort = ESort.Top)
+        [FromQuery] ESort sort = ESort.Top)
     {
         Guid? userId = User.IsAuthenticated() ? User.GetUserId() : null;
 
-        var (comments, pageCount) = await _uow.CommentService.GetAll(userId, url, sort, pageNr, pageSize);
+        var (comments, pageCount) = await _uow.CommentService
+            .GetAll(userId, url, sort, pageNr, pageSize);
 
         return new ResponseWithPaging<Comment>
         {
@@ -51,13 +48,10 @@ public class CommentsController : ControllerBase
     }
 
     [HttpGet("replies")]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(ResponseWithPaging<Comment>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<ResponseWithPaging<Comment>>> GetAllReplies(
-        [FromQuery] Guid parentCommentId,
-        [FromQuery][Range(1, int.MaxValue)] int pageNr = 1,
-        [FromQuery][Range(1, 100)] int pageSize = 10,
+    public async Task<ResponseWithPaging<Comment>> GetAllReplies(
+        [FromQuery] [Required] Guid parentCommentId,
+        [FromQuery] [Range(1, int.MaxValue)] int pageNr = 1,
+        [FromQuery] [Range(1, 100)] int pageSize = 10,
         [FromQuery] ESort sort = ESort.Old)
     {
         Guid? userId = User.IsAuthenticated() ? User.GetUserId() : null;
@@ -76,10 +70,7 @@ public class CommentsController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(Comment), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<Comment>> Add([FromBody] PostComment postComment)
+    public async Task<Comment> Add([FromBody] PostComment postComment)
     {
         var userId = User.GetUserId();
 
@@ -95,10 +86,7 @@ public class CommentsController : ControllerBase
     
     [HttpPost("replies")]
     [Authorize]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(Comment), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<Comment>> AddReply([FromBody] PostReply postComment)
+    public async Task<Comment> AddReply([FromBody] PostReply postComment)
     {
         var userId = User.GetUserId();
 

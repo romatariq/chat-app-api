@@ -59,6 +59,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddSignalR();
+builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
 {

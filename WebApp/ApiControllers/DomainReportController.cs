@@ -23,17 +23,13 @@ public class DomainReportController: ControllerBase
     }
     
     [HttpGet]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(DomainReports), StatusCodes.Status200OK)]
-    public async Task<ActionResult<DomainReports>> GetAll([FromQuery] string url, EDomainReportTimeframe timeframe)
+    public async Task<DomainReports> GetAll([FromQuery] string url, EDomainReportTimeframe timeframe)
     {
         return await _uow.DomainReportService.GetReports(url, timeframe);
     }
 
     [HttpPost("{url}")]
     [Authorize]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType( StatusCodes.Status201Created)]
     public async Task<ActionResult> Add([FromRoute] string url)
     {
         var domainId = await _uow.UrlService.GetOrCreateDomainId(url);
@@ -47,9 +43,7 @@ public class DomainReportController: ControllerBase
 
     [HttpGet("[action]")]
     [Authorize]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-    public async Task<ActionResult<bool>> CanReport([FromQuery] string url)
+    public async Task<bool> CanReport([FromQuery] string url)
     {
         var domainId = await _uow.UrlService.GetOrCreateDomainId(url);
         var userId = User.GetUserId();

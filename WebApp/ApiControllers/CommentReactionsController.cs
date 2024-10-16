@@ -27,9 +27,7 @@ public class CommentReactionsController: ControllerBase
     }
     
     [HttpPost]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(PublicV1.CommentReaction), StatusCodes.Status201Created)]
-    public async Task<ActionResult<PublicV1.CommentReaction>> Add([FromBody] PublicV1.CommentReaction reaction)
+    public async Task<PublicV1.CommentReaction> Add([FromBody] PublicV1.CommentReaction reaction)
     {
         var bllReaction = new Bll.CommentReaction()
         {
@@ -47,9 +45,7 @@ public class CommentReactionsController: ControllerBase
     
     
     [HttpPut]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(PublicV1.CommentReaction), StatusCodes.Status200OK)]
-    public async Task<ActionResult<PublicV1.CommentReaction>> Update([FromBody] PublicV1.CommentReaction reaction)
+    public async Task<PublicV1.CommentReaction> Update([FromBody] PublicV1.CommentReaction reaction)
     {
         var bllReaction = new Bll.CommentReaction()
         {
@@ -67,8 +63,6 @@ public class CommentReactionsController: ControllerBase
         
     
     [HttpDelete]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> Delete([FromQuery] Guid commentId)
     {
         await _uow.CommentReactionService.Delete(commentId, User.GetUserId());

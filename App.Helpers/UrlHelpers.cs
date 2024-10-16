@@ -1,5 +1,6 @@
 using System.Text;
 using System.Web;
+using App.Domain.Exceptions;
 
 namespace App.Helpers;
 
@@ -18,8 +19,12 @@ public static class UrlHelpers
     
     private static (string domain, string path, string parameters) SplitUrl(this string url)
     {
-        var uri = new Uri(url);
-        return (uri.Authority, uri.LocalPath, uri.Query);
+        if (Uri.TryCreate(url, UriKind.Absolute, out var uri))
+        {
+            return (uri.Authority, uri.LocalPath, uri.Query);
+        }
+
+        throw new CustomUserBadInputException($"Invalid url: '{url}'");
     }
 
 

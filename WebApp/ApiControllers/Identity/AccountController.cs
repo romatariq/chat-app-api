@@ -32,9 +32,6 @@ public class AccountController : ControllerBase
     
     
     [HttpPost]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType( StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Register([FromBody] Register registrationData)
     {
         if (registrationData.Password != registrationData.ConfirmPassword)
@@ -75,9 +72,6 @@ public class AccountController : ControllerBase
 
     
     [HttpPost]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> LogIn([FromBody] Login loginData)
     {
         var appUser = await _userManager.FindByEmailAsync(loginData.Email);
@@ -100,7 +94,6 @@ public class AccountController : ControllerBase
     
     [HttpPost]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
@@ -110,7 +103,6 @@ public class AccountController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK)]
     public Task<ActionResult> IsLoggedIn()
     {
         _logger.LogInformation("{} checked if still logged in.", User.GetUsername());
