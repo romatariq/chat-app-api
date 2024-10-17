@@ -14,7 +14,7 @@ public class ResponseTimerMiddleware(RequestDelegate next, ILogger<ResponseTimer
         finally
         {
             stopwatch.Stop();
-            logger.LogInformation("Responded in {}ms to {} '{}'", stopwatch.ElapsedMilliseconds, context.Request.Method, context.Request.Path);
+            logger.LogInformation("Responded in {}ms to {} '{}{}'", stopwatch.ElapsedMilliseconds, context.Request.Method, context.Request.Path, context.Request.QueryString);
         }
     }
 }
