@@ -36,5 +36,5 @@ public class AppBLL : BaseBLL<IAppUOW>, IAppBLL
         _commentReactionService ??= new CommentReactionService(Uow, _mapper);
 
     public IDomainReportService DomainReportService =>
-        _domainReportService ??= new DomainDomainReportService(Uow);
+        _domainReportService ??= new DomainReportService(Uow);
 }

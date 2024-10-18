@@ -7,11 +7,11 @@ using App.Helpers;
 
 namespace App.BLL.Services;
 
-public class DomainDomainReportService : IDomainReportService
+public class DomainReportService : IDomainReportService
 {
     protected IAppUOW Uow;
 
-    public DomainDomainReportService(IAppUOW uow)
+    public DomainReportService(IAppUOW uow)
     {
         Uow = uow;
     }
