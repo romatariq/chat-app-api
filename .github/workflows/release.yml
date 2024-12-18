@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build image
-        run: docker build -t chat-app .
+        run: docker build -t chat-app ./src/
 
       - name: Tag image
         run: docker tag chat-app ${{ secrets.DOCKER_USERNAME }}/chat-app:latest
