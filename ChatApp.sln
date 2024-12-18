@@ -1,14 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{6F2AA293-A714-4A50-9A6C-E82D94511E60}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "src\WebApp\WebApp.csproj", "{6F2AA293-A714-4A50-9A6C-E82D94511E60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.DAL.EF", "App.DAL.EF\App.DAL.EF.csproj", "{B7E80F2E-8071-4357-A8A6-EB1350543F8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.DAL.EF", "src\App.DAL.EF\App.DAL.EF.csproj", "{B7E80F2E-8071-4357-A8A6-EB1350543F8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Domain", "App.Domain\App.Domain.csproj", "{9C098622-11B0-4114-A15E-A8CBCD1A713A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Domain", "src\App.Domain\App.Domain.csproj", "{9C098622-11B0-4114-A15E-A8CBCD1A713A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Domain", "Base.Domain\Base.Domain.csproj", "{5C89982D-CE45-40AC-ACDA-3E36AB40843E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Domain", "src\Base.Domain\Base.Domain.csproj", "{5C89982D-CE45-40AC-ACDA-3E36AB40843E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Contracts.Domain", "Base.Contracts.Domain\Base.Contracts.Domain.csproj", "{37B8D2D9-7BB3-4CD6-95E6-52C2D5D0588C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Contracts.Domain", "src\Base.Contracts.Domain\Base.Contracts.Domain.csproj", "{37B8D2D9-7BB3-4CD6-95E6-52C2D5D0588C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{CC4F94BC-803E-481E-98C1-DB26ABA3C048}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,43 +19,43 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		TODO.md = TODO.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{4F71A9E6-74BF-46D8-8B80-C883C56FDF35}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "src\App", "{4F71A9E6-74BF-46D8-8B80-C883C56FDF35}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{853F1AF2-97CC-449D-A411-80A849FCD23A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "src\Base", "{853F1AF2-97CC-449D-A411-80A849FCD23A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{E2B2DD50-CF4E-49F1-BDF5-3BEC3D4306DC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "src\Contracts", "{E2B2DD50-CF4E-49F1-BDF5-3BEC3D4306DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.DTO.Public", "App.DTO.Public\App.DTO.Public.csproj", "{8127045E-91D9-4E3D-A3AF-B0F578C1690C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.DTO.Public", "src\App.DTO.Public\App.DTO.Public.csproj", "{8127045E-91D9-4E3D-A3AF-B0F578C1690C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Helpers", "Base.Helpers\Base.Helpers.csproj", "{3D9AEAE9-EB4E-42CC-9F15-37E0A69313FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Helpers", "src\Base.Helpers\Base.Helpers.csproj", "{3D9AEAE9-EB4E-42CC-9F15-37E0A69313FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Helpers", "App.Helpers\App.Helpers.csproj", "{9EFE5C74-664F-4DD8-BEF3-8FF07EB04733}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Helpers", "src\App.Helpers\App.Helpers.csproj", "{9EFE5C74-664F-4DD8-BEF3-8FF07EB04733}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.DAL.EF", "Base.DAL.EF\Base.DAL.EF.csproj", "{4864FB81-6C8C-4C63-AEDE-AF9FEF6D5901}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.DAL.EF", "src\Base.DAL.EF\Base.DAL.EF.csproj", "{4864FB81-6C8C-4C63-AEDE-AF9FEF6D5901}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Contracts.DAL", "Base.Contracts.DAL\Base.Contracts.DAL.csproj", "{80FB7F20-EECA-42C3-BE53-00FAC26DE715}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Contracts.DAL", "src\Base.Contracts.DAL\Base.Contracts.DAL.csproj", "{80FB7F20-EECA-42C3-BE53-00FAC26DE715}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{C3C961DA-83B3-4F56-9667-E0C9718D158F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "src\Contracts", "{C3C961DA-83B3-4F56-9667-E0C9718D158F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Contracts.DAL", "App.Contracts.DAL\App.Contracts.DAL.csproj", "{FC607DE8-D16A-4627-A9E5-D69A87986CCA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Contracts.DAL", "src\App.Contracts.DAL\App.Contracts.DAL.csproj", "{FC607DE8-D16A-4627-A9E5-D69A87986CCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.DTO.Private", "App.DTO.Private\App.DTO.Private.csproj", "{AC65CA59-AB21-4B41-97BD-FF12FE75E520}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.DTO.Private", "src\App.DTO.Private\App.DTO.Private.csproj", "{AC65CA59-AB21-4B41-97BD-FF12FE75E520}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.BLL", "App.BLL\App.BLL.csproj", "{5903650B-3166-4953-BDCB-765FACB87348}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.BLL", "src\App.BLL\App.BLL.csproj", "{5903650B-3166-4953-BDCB-765FACB87348}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Contracts.BLL", "App.Contracts.BLL\App.Contracts.BLL.csproj", "{E423CE2B-783E-4571-94CB-76A93BD4E1A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Contracts.BLL", "src\App.Contracts.BLL\App.Contracts.BLL.csproj", "{E423CE2B-783E-4571-94CB-76A93BD4E1A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Contracts.BLL", "Base.Contracts.BLL\Base.Contracts.BLL.csproj", "{D450EB91-DA83-47DE-BD3F-75374C1119D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Contracts.BLL", "src\Base.Contracts.BLL\Base.Contracts.BLL.csproj", "{D450EB91-DA83-47DE-BD3F-75374C1119D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.BLL", "Base.BLL\Base.BLL.csproj", "{B3F37130-EAB5-42FE-92D6-D0925681E8C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.BLL", "src\Base.BLL\Base.BLL.csproj", "{B3F37130-EAB5-42FE-92D6-D0925681E8C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Mappers", "App.Mappers\App.Mappers.csproj", "{B4199BA5-D497-4935-809C-48E0A257A38E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Mappers", "src\App.Mappers\App.Mappers.csproj", "{B4199BA5-D497-4935-809C-48E0A257A38E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Contracts", "Base.Contracts\Base.Contracts.csproj", "{A4FEDC76-98D6-4E9B-B8C8-5BF7865D2702}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Contracts", "src\Base.Contracts\Base.Contracts.csproj", "{A4FEDC76-98D6-4E9B-B8C8-5BF7865D2702}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.DAL", "Base.DAL\Base.DAL.csproj", "{608EA259-312C-4406-8168-F9667A107819}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.DAL", "src\Base.DAL\Base.DAL.csproj", "{608EA259-312C-4406-8168-F9667A107819}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.DTO.Common", "App.DTO.Common\App.DTO.Common.csproj", "{923E21E9-9013-4CFA-A544-77C03C5E7C05}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.DTO.Common", "src\App.DTO.Common\App.DTO.Common.csproj", "{923E21E9-9013-4CFA-A544-77C03C5E7C05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
