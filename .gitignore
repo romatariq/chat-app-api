@@ -1,6 +1,6 @@
 # My ignores
-.env*
-/.idea/*
+**/.env*
+**/.idea/*
 
 # Common IntelliJ Platform excludes
 
