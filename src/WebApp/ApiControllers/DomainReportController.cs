@@ -31,11 +31,11 @@ public class DomainReportController: ControllerBase
         };
     }
 
-    [HttpPost("{url}")]
+    [HttpPost]
     [Authorize]
-    public async Task<ActionResult> Add([FromRoute] string url)
+    public async Task<ActionResult> Add([FromBody] PostUrl url)
     {
-        var domainId = await _uow.UrlService.GetOrCreateDomainId(url);
+        var domainId = await _uow.UrlService.GetOrCreateDomainId(url.Url);
         var userId = User.GetUserId();
 
         await _uow.DomainReportService.AddReport(domainId, userId);
