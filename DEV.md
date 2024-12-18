@@ -1,3 +1,30 @@
+# Commands
+
+## Migrations
+~~~bash
+# install or update tools
+dotnet tool install --global dotnet-ef
+dotnet tool update --global dotnet-ef
+
+# create migration
+dotnet ef migrations add Initial --project App.DAL.EF --startup-project WebApp --context AppDbContext
+
+# apply migration
+dotnet ef database update --project App.DAL.EF --startup-project WebApp --context AppDbContext
+~~~
+
+## Docker
+~~~bash
+# --build updates the image
+docker-compose up --build
+
+# Docker Hub
+docker build -t chat-app .
+docker tag chat-app romatariq/chat-app:latest
+docker push romatariq/chat-app:latest
+~~~
+
+
 # TODOs
 
 - [X] Username displayed as case sensitive but unique as not case sensitive (e.g. Admin == admin)
